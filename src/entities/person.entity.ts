@@ -2,7 +2,6 @@ import { Role } from "../enum/role.enum";
 import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Date } from "./date.entity";
 
-@Entity('person')
 export class Person extends Date {
     @PrimaryGeneratedColumn()
     id: number;
