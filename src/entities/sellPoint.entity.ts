@@ -15,6 +15,6 @@ export class SellPoint{
     @Column({ type: 'bigint' })
     phoneNumber: number;
 
-    @ManyToMany(()=>Event, (events: Event) => events.sellPoints)
+    @ManyToMany(()=>Event, event => event.sellPoints)
     events: Event[];
 }

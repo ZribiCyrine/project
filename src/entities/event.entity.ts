@@ -28,32 +28,17 @@ export class Event extends Date{
     @Column({ type: 'float' })
     ticketPrice: number;
 
-    @ManyToMany(() => SellPoint)
-    @JoinTable({
-        name: "admin_events",
-        joinColumn: {
-        name: "event", 
-        referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-        name: "admin",
-        referencedColumnName: "id"
-        }
-        })
+    @ManyToMany(() => SellPoint, sellPoint => sellPoint.events)
+    @JoinTable()
     sellPoints: SellPoint[];
     
-    @Column({ type: 'text', nullable: true })
-    @OneToMany(() => Image, poster_oldPhotos => poster_oldPhotos.event, {
-        cascade: true 
-    })
+    @OneToMany(() => Image, poster_oldPhoto => poster_oldPhoto.event)
     poster_oldPhotos: Image[];
 
-    @ManyToOne(()=>Creator, (creator: Creator) => creator.events,{
-        eager: true
-    })
+    @ManyToOne(() => Creator, creator => creator.events)
     creator: Creator;
 
-    @ManyToOne(()=>Admin, (admin: Admin) => admin.events)
+    @ManyToOne(() => Admin, admin => admin.events)
     admin: Admin
 
     @Column({ default: false })

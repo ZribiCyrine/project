@@ -4,6 +4,6 @@ import { Event } from "./event.entity";
 
 @Entity('creator')
 export class Creator extends Person{
-    @OneToMany(()=>Event, (events: Event)=> events.creator)
+    @OneToMany(type => Event, event => event.creator)
     events: Event[];
 }

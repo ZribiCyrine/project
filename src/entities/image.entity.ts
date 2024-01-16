@@ -9,6 +9,6 @@ export class Image {
     @Column({ type: 'varchar'})
     url: string;
 
-    @ManyToOne(() => Event, (event: Event) => event.poster_oldPhotos)
+    @ManyToOne(() => Event, event => event.poster_oldPhotos)
     event: Event;
 }

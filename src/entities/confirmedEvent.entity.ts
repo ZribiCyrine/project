@@ -4,7 +4,7 @@ import { Ticket } from "./ticket.entity";
 
 @Entity('confirmedevent')
 export class ConfirmedEvent extends Event{
-    @Column({ type: 'timestamp', nullable: true })
+    @Column({ type: 'datetime', nullable: true })
     confirmedDate: Date | null;
 
     @BeforeInsert()
@@ -14,6 +14,6 @@ export class ConfirmedEvent extends Event{
         }
     }
 
-    @OneToMany(()=>Ticket, (tickets: Ticket)=> tickets.confirmedEvent)
+    @OneToMany(() => Ticket, ticket => ticket.confirmedEvent)
     tickets: Ticket[];
 }

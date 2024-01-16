@@ -11,10 +11,10 @@ export class Ticket extends Date {
     @Column({type: 'varchar'})
     status: TicketStatus
 
-    @ManyToOne(() => Participant, (participant: Participant) => participant.tickets)
+    @ManyToOne(() => Participant, participant => participant.tickets)
     participant: Participant;
 
-    @ManyToOne(() => ConfirmedEvent, (confirmedEvent: ConfirmedEvent) => confirmedEvent.tickets)
+    @ManyToOne(() => ConfirmedEvent, confirmedEvent => confirmedEvent.tickets)
     confirmedEvent: ConfirmedEvent;
 
 }

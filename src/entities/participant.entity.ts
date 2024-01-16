@@ -4,6 +4,6 @@ import { Ticket } from "./ticket.entity";
 
 @Entity('participant')
 export class Participant extends Person{
-    @OneToMany(()=>Ticket, (tickets: Ticket)=> tickets.participant)
+    @OneToMany(()=>Ticket, ticket => ticket.participant)
     tickets: Ticket[];
 }
