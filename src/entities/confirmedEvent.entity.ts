@@ -14,6 +14,8 @@ export class ConfirmedEvent extends Event{
         }
     }
 
-    @OneToMany(() => Ticket, ticket => ticket.confirmedEvent)
+    @OneToMany(() => Ticket, ticket => ticket.confirmedEvent, {
+        cascade: true 
+    })
     tickets: Ticket[];
 }

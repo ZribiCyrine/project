@@ -28,11 +28,17 @@ export class Event extends Date{
     @Column({ type: 'float' })
     ticketPrice: number;
 
-    @ManyToMany(() => SellPoint, sellPoint => sellPoint.events)
+    @ManyToMany(() => SellPoint, sellPoint => sellPoint.events, {
+        cascade: true,
+        eager: true
+    })
     @JoinTable()
     sellPoints: SellPoint[];
     
-    @OneToMany(() => Image, poster_oldPhoto => poster_oldPhoto.event)
+    @OneToMany(() => Image, poster_oldPhoto => poster_oldPhoto.event, {
+        cascade: true,
+        eager: true
+    })
     poster_oldPhotos: Image[];
 
     @ManyToOne(() => Creator, creator => creator.events)
