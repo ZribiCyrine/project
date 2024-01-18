@@ -29,12 +29,13 @@ import { ImageModule } from './image/image.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities:[Admin, Creator, Participant, Event, ConfirmedEvent, SellPoint, Image, Ticket],
+      entities: ["dist/**/*.entity{.ts,.js}"],
+      //entities: [Admin, Creator, Participant, Event, ConfirmedEvent, SellPoint, Image, Ticket],
       synchronize: true,
       logging: true,
       options: {
         enableArithAbort: true,
-        trustServerCertificate: true, 
+        trustServerCertificate: true,
         encrypt: true
       }
     }),
@@ -51,4 +52,4 @@ import { ImageModule } from './image/image.module';
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {}
+export class AppModule { }

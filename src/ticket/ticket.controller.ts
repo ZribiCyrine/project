@@ -17,7 +17,7 @@ export class TicketController {
     return this.ticketService.findAll();
   }
 
-  @Get(':id')
+  /*@Get(':id')
   findOne(@Param('id') id: string) {
     return this.ticketService.findOne(+id);
   }
@@ -25,7 +25,7 @@ export class TicketController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
     return this.ticketService.update(+id, updateTicketDto);
-  }
+  }*/
 
   @Delete(':id')
   remove(@Param('id') id: string) {

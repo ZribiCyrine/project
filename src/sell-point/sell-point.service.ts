@@ -14,8 +14,8 @@ export class SellPointService {
   ) {}
 
   async create(createSellPointDto: CreateSellPointDto): Promise<SellPoint> {
-    const participant = this.sellPointRepository.create(createSellPointDto);
-    return await this.sellPointRepository.save(participant);
+    const sellPoint = this.sellPointRepository.create(createSellPointDto);
+    return await this.sellPointRepository.save(sellPoint);
   }
 
   async findAll(): Promise<SellPoint[]> {
