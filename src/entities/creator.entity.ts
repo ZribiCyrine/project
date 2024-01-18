@@ -1,6 +1,7 @@
 import { Column, Entity, OneToMany } from "typeorm";
-import { Person } from "./person.entity";
 import { Event } from "./event.entity";
+import { Person } from "./person.entity";
+import { Role } from "../enum/role.enum";
 
 @Entity('creator')
 export class Creator extends Person{
@@ -8,4 +9,8 @@ export class Creator extends Person{
         cascade: true 
     })
     events: Event[];
+
+    constructor(name: string, firstname: string, cin: number, phoneNumber: number, email: string, role: Role){
+        super(name, firstname, cin, phoneNumber,email, Role.CREATOR);
+    }
 }

@@ -1,5 +1,5 @@
 import { Role } from "../enum/role.enum";
-import { Entity, PrimaryGeneratedColumn, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, Column } from 'typeorm';
 import { Date } from "./date.entity";
 
 export class Person extends Date {
