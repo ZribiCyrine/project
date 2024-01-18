@@ -24,13 +24,4 @@ export class Person extends Date {
     @Column({type: 'varchar'})
     role: Role;
 
-    constructor(name: string, firstname: string, cin: number, phoneNumber: number, email: string, role: Role){
-        super();
-        this.name= name;
-        this.firstname= firstname;
-        this.cin= cin;
-        this.phoneNumber= phoneNumber;
-        this.email= email;
-        this.role= role;
-    }
 }

@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { CreateConfirmedEventDto } from './dto/create-confirmed-event.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { UpdateConfirmedEventDto } from './dto/update-confirmed-event.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ConfirmedEvent } from '../entities/confirmedEvent.entity';
+import { Repository } from 'typeorm';
+import { Event } from '../entities/event.entity';
 
 @Injectable()
 export class ConfirmedEventService {
-  create(createConfirmedEventDto: CreateConfirmedEventDto) {
-    return 'This action adds a new confirmedEvent';
+  constructor(
+    @InjectRepository(ConfirmedEvent)
+    private readonly confirmedEventRepository: Repository<ConfirmedEvent>,
+  ) {}
+
+  async create(event: Event): Promise<ConfirmedEvent> {
+    const confirmedEvent = this.confirmedEventRepository.create(event);
+    return await this.confirmedEventRepository.save(confirmedEvent);
   }
 
-  findAll() {
-    return `This action returns all confirmedEvent`;
+  async findAll(): Promise<ConfirmedEvent[]> {
+    return await this.confirmedEventRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} confirmedEvent`;
+  async findOne(id: number): Promise<ConfirmedEvent> {
+    const confirmedEvent = await this.confirmedEventRepository.findOne({ where: { id: id } });
+    if (!confirmedEvent) {
+      throw new NotFoundException(`ConfirmedEvent with ID ${id} not found`);
+    }
+    return confirmedEvent;
   }
 
-  update(id: number, updateConfirmedEventDto: UpdateConfirmedEventDto) {
-    return `This action updates a #${id} confirmedEvent`;
+  async update(id: number, updateConfirmedEventDto: UpdateConfirmedEventDto): Promise<ConfirmedEvent> {
+    this.confirmedEventRepository.update(id, updateConfirmedEventDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} confirmedEvent`;
+  async remove(id: number): Promise<void> {
+    await this.confirmedEventRepository.delete(id);
   }
 }

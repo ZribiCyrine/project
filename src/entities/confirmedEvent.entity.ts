@@ -4,8 +4,8 @@ import { Event } from "./event.entity";
 
 @Entity('confirmedevent')
 export class ConfirmedEvent extends Event{
-    @Column({ type: 'datetime', nullable: true })
-    confirmedDate: Date | null;
+    @Column({ type: 'datetime'})
+    confirmedDate: Date;
 
     @BeforeInsert()
     setConfirmedDate() {

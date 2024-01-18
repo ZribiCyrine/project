@@ -7,10 +7,10 @@ import { UpdateConfirmedEventDto } from './dto/update-confirmed-event.dto';
 export class ConfirmedEventController {
   constructor(private readonly confirmedEventService: ConfirmedEventService) {}
 
-  @Post()
+  /*@Post()
   create(@Body() createConfirmedEventDto: CreateConfirmedEventDto) {
     return this.confirmedEventService.create(createConfirmedEventDto);
-  }
+  }*/
 
   @Get()
   findAll() {

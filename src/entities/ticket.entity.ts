@@ -1,5 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
-import { TicketStatus } from "../enum/ticketStatus.enum";
+import { Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Participant } from "./participant.entity";
 import { ConfirmedEvent } from "./confirmedEvent.entity";
 
@@ -7,9 +6,6 @@ import { ConfirmedEvent } from "./confirmedEvent.entity";
 export class Ticket extends Date {
     @PrimaryGeneratedColumn()
     id: number;
-
-    @Column({type: 'varchar'})
-    status: TicketStatus
 
     @ManyToOne(() => Participant, participant => participant.tickets)
     participant: Participant;

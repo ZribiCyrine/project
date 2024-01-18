@@ -4,12 +4,14 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
+import { ConfirmedEventService } from '../confirmed-event/confirmed-event.service';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
+    private readonly confirmedEventService: ConfirmedEventService
   ) {}
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
@@ -36,5 +38,10 @@ export class EventService {
 
   async remove(id: number): Promise<void> {
     await this.eventRepository.delete(id);
+  }
+
+  async acceptEvent(id: number): Promise<void> {
+    const event = await this.findOne(id);
+    const confirmedEvent = await this.confirmedEventService.create(event);
   }
 }

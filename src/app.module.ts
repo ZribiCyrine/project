@@ -15,10 +15,10 @@ import { CreatorModule } from './creator/creator.module';
 import { ParticipantModule } from './participant/participant.module';
 import { EventModule } from './event/event.module';
 import { ConfirmedEventModule } from './confirmed-event/confirmed-event.module';
-import { ImageModule } from './image/image.module';
-import { SellPointModule } from './sell-point/sell-point.module';
 import { TicketModule } from './ticket/ticket.module';
 import { PersonModule } from './person/person.module';
+import { SellPointModule } from './sell-point/sell-point.module';
+import { ImageModule } from './image/image.module';
 
 @Module({
   imports: [
@@ -43,10 +43,10 @@ import { PersonModule } from './person/person.module';
     ParticipantModule,
     EventModule,
     ConfirmedEventModule,
-    ImageModule,
-    SellPointModule,
     TicketModule,
-    PersonModule
+    PersonModule,
+    SellPointModule,
+    ImageModule
   ],
   controllers: [AppController],
   providers: [AppService],

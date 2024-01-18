@@ -9,7 +9,5 @@ export class Participant extends Person{
         cascade: true 
     })
     tickets: Ticket[];
-    constructor(name: string, firstname: string, cin: number, phoneNumber: number, email: string, role: Role){
-        super(name, firstname, cin, phoneNumber,email, Role.PARTICIPANT);
-    }
+
 }

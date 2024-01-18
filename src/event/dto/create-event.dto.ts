@@ -31,7 +31,7 @@ export class CreateEventDto {
   @IsArray()
   sellPoints: SellPoint[];
   
-  @IsNotEmpty()
+  @IsOptional()
   @IsArray()
   poster_oldPhotos: Image[];
   
