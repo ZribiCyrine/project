@@ -18,6 +18,7 @@ import { ConfirmedEventModule } from './confirmed-event/confirmed-event.module';
 import { ImageModule } from './image/image.module';
 import { SellPointModule } from './sell-point/sell-point.module';
 import { TicketModule } from './ticket/ticket.module';
+import { PersonModule } from './person/person.module';
 
 @Module({
   imports: [
@@ -44,7 +45,8 @@ import { TicketModule } from './ticket/ticket.module';
     ConfirmedEventModule,
     ImageModule,
     SellPointModule,
-    TicketModule
+    TicketModule,
+    PersonModule
   ],
   controllers: [AppController],
   providers: [AppService],

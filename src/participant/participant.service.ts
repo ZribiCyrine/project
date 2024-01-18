@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { CreateParticipantDto } from './dto/create-participant.dto';
-import { UpdateParticipantDto } from './dto/update-participant.dto';
+import { Injectable, NotFoundException } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { Participant } from "../entities/participant.entity";
+import { Repository } from "typeorm";
+import { CreateParticipantDto } from "./dto/create-participant.dto";
+import { UpdateParticipantDto } from "./dto/update-participant.dto";
 
 @Injectable()
 export class ParticipantService {
-  create(createParticipantDto: CreateParticipantDto) {
-    return 'This action adds a new participant';
+  constructor(
+    @InjectRepository(Participant)
+    private readonly participantRepository: Repository<Participant>,
+  ) {}
+
+  async create(createParticipantDto: CreateParticipantDto): Promise<Participant> {
+    const participant = this.participantRepository.create(createParticipantDto);
+    return await this.participantRepository.save(participant);
   }
 
-  findAll() {
-    return `This action returns all participant`;
+  async findAll(): Promise<Participant[]> {
+    return await this.participantRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} participant`;
+  async findOne(id: number): Promise<Participant> {
+    const participant = await this.participantRepository.findOne({ where: { id: id } });
+    if (!participant) {
+      throw new NotFoundException(`Participant with ID ${id} not found`);
+    }
+    return participant;
   }
 
-  update(id: number, updateParticipantDto: UpdateParticipantDto) {
-    return `This action updates a #${id} participant`;
+  async update(id: number, updateParticipantDto: UpdateParticipantDto): Promise<Participant> {
+    this.participantRepository.update(id, updateParticipantDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} participant`;
+  async remove(id: number): Promise<void> {
+    await this.participantRepository.delete(id);
   }
 }

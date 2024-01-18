@@ -1,26 +1,40 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateCreatorDto } from './dto/create-creator.dto';
 import { UpdateCreatorDto } from './dto/update-creator.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Creator } from '../entities/creator.entity';
+import { Repository } from 'typeorm';
 
 @Injectable()
 export class CreatorService {
-  create(createCreatorDto: CreateCreatorDto) {
-    return 'This action adds a new creator';
+  constructor(
+    @InjectRepository(Creator)
+    private readonly creatorRepository: Repository<Creator>,
+  ) {}
+
+  async create(createCreatorDto: CreateCreatorDto): Promise<Creator> {
+    const creator = this.creatorRepository.create(createCreatorDto);
+    return await this.creatorRepository.save(creator);
   }
 
-  findAll() {
-    return `This action returns all creator`;
+  async findAll(): Promise<Creator[]> {
+    return await this.creatorRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} creator`;
+  async findOne(id: number): Promise<Creator> {
+    const creator = await this.creatorRepository.findOne({ where: { id: id } });
+    if (!creator) {
+      throw new NotFoundException(`Creator with ID ${id} not found`);
+    }
+    return creator;
   }
 
-  update(id: number, updateCreatorDto: UpdateCreatorDto) {
-    return `This action updates a #${id} creator`;
+  async update(id: number, updateCreatorDto: UpdateCreatorDto): Promise<Creator> {
+    this.creatorRepository.update(id, updateCreatorDto);
+    return await this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} creator`;
+  async remove(id: number): Promise<void> {
+    await this.creatorRepository.delete(id);
   }
 }
