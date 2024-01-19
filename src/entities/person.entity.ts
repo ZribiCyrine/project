@@ -1,5 +1,5 @@
 import { Role } from "../enum/role.enum";
-import { PrimaryGeneratedColumn, Column } from 'typeorm';
+import { PrimaryGeneratedColumn, Column, Entity } from 'typeorm';
 import { Date } from "./date.entity";
 
 export class Person extends Date {
@@ -21,7 +21,6 @@ export class Person extends Date {
     @Column({ type: 'varchar'})
     email: string;
 
-    @Column({type: 'varchar'})
+    @Column({ type: 'varchar'})
     role: Role;
-
 }

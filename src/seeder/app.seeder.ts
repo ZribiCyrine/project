@@ -1,20 +1,21 @@
-import { NestFactory } from "@nestjs/core";
-import { AppModule } from "../app.module";
-import { AdminService } from "../admin/admin.service";
-import { CreatorService } from "../creator/creator.service";
-import { ParticipantService } from "../participant/participant.service";
-import { EventService } from "../event/event.service";
-import { Admin } from "../entities/admin.entity";
-import { Creator } from "../entities/creator.entity";
-import { Participant } from "../entities/participant.entity";
-import { SellPoint } from "../entities/sellPoint.entity";
-import { Ticket } from "../entities/ticket.entity";
-import { Event } from "../entities/event.entity";
+import * as dotenv from 'dotenv';
+dotenv.config();
+import { Logger } from '@nestjs/common';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from '../app.module';
+import { AdminService } from '../admin/admin.service';
+import { CreatorService } from '../creator/creator.service';
+import { ParticipantService } from '../participant/participant.service';
+import { EventService } from '../event/event.service';
+import { Admin } from '../entities/admin.entity';
+import { Creator } from '../entities/creator.entity';
+import { Participant } from '../entities/participant.entity';
+import { SellPoint } from '../entities/sellPoint.entity';
+import { Ticket } from '../entities/ticket.entity';
+import { Event } from '../entities/event.entity';
+import { Image } from '../entities/image.entity';
+import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
-import { Role } from "../enum/role.enum";
-import { Image } from "../entities/image.entity";
-import { Logger } from "@nestjs/common";
-
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -25,7 +26,6 @@ async function bootstrap() {
         const creatorService = app.get(CreatorService);
         const participantService = app.get(ParticipantService);
         const eventService = app.get(EventService);
-       
 
         const admins = [];
         for (let i = 0; i < 20; i++) {
@@ -59,7 +59,7 @@ async function bootstrap() {
             participant.name = falso.randLastName();
             participant.firstname = falso.randFirstName();
             participant.cin = falso.randNumber({ min: 10000000, max: 99999999 });
-            participant.phoneNumber = +falso.randPhoneNumber();
+            participant.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             participant.email = falso.randEmail();
             participant.role = Role.PARTICIPANT;
             const newParticipant = await participantService.create(participant);
@@ -71,7 +71,7 @@ async function bootstrap() {
             const sellPoint = new SellPoint();
             sellPoint.name = falso.randCompanyName();
             sellPoint.address = falso.randFullAddress();
-            sellPoint.phoneNumber = +falso.randPhoneNumber();
+            sellPoint.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             sellPoints.push(sellPoint);
         }
 
@@ -93,9 +93,9 @@ async function bootstrap() {
             event.rules = rules[Math.floor(Math.random() * 3)];
             event.ticketPrice = falso.randFloat({ min: 40, max: 120 });
 
-            /*const nbSellPoints = Math.floor(Math.random() * sellPoints.length) + 1;
+            const nbSellPoints = Math.floor(Math.random() * sellPoints.length) + 1;
             event.sellPoints = sellPoints.sort(() => 0.5 - Math.random()).slice(0, nbSellPoints);
-*/
+
             event.creator = creators[Math.floor(Math.random() * creators.length)];
             event.admin = admins[Math.floor(Math.random() * admins.length)];
             const newEvent = await eventService.create(event);

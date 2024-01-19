@@ -1,4 +1,4 @@
 {
     "typescript.preferences.importModuleSpecifier": "relative",
-    "javascript.preferences.importModuleSpecifier": "shortest"
+    "javascript.preferences.importModuleSpecifier": "relative"
 }
