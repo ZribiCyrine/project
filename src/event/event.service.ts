@@ -43,7 +43,7 @@ export class EventService {
   async acceptEvent(id: number): Promise<void> {
     const event = await this.findOne(id);
     event.isConfirmed = true;
-    await this.update(id, event);
+    await this.eventRepository.save(event)
     await this.confirmedEventService.create(event);
   }
 }
