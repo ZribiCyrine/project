@@ -22,7 +22,7 @@ export class TicketService {
   }
 
   /*async findOne(id: number): Promise<Ticket> {
-    const ticket = await this.ticketRepository.findOne({ where: { id: id } });
+    const ticket = await this.ticketRepository.findOne({where: {id: id}})
     if (!ticket) {
       throw new NotFoundException(`Ticket with ID ${id} not found`);
     }
@@ -32,8 +32,8 @@ export class TicketService {
   async update(id: number, updateTicketDto: UpdateTicketDto): Promise<Ticket> {
     this.ticketRepository.update(id, updateTicketDto);
     return await this.findOne(id);
-  }
-*/
+  }*/
+
   async remove(id: number): Promise<void> {
     await this.ticketRepository.delete(id);
   }
