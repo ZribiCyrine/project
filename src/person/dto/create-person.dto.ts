@@ -1,6 +1,7 @@
 import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, isEnum, isString } from "class-validator";
-import { Role } from "../../enum/role.enum";
+import { Unique } from "typeorm";
 
+@Unique(['email'])
 export class CreatePersonDto {
     @IsNotEmpty()
     @IsString()

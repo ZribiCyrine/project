@@ -38,6 +38,7 @@ async function bootstrap() {
             admin.cin = falso.randNumber({ min: 10000000, max: 99999999 });
             admin.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             admin.email = falso.randEmail();
+            admin.password = falso.randPassword();
             admin.role = Role.ADMIN;
             const newAdmin = await adminService.create(admin);
             admins.push(newAdmin);
@@ -51,6 +52,7 @@ async function bootstrap() {
             creator.cin = falso.randNumber({ min: 10000000, max: 99999999 });
             creator.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             creator.email = falso.randEmail();
+            creator.password = falso.randPassword();
             creator.role = Role.CREATOR;
             const newCreator = await creatorService.create(creator);
             creators.push(newCreator);
@@ -64,6 +66,7 @@ async function bootstrap() {
             participant.cin = falso.randNumber({ min: 10000000, max: 99999999 });
             participant.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             participant.email = falso.randEmail();
+            participant.password = falso.randPassword();
             participant.role = Role.PARTICIPANT;
             const newParticipant = await participantService.create(participant);
             participants.push(newParticipant);
