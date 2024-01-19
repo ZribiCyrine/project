@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional, IsNumber, ArrayNotEmpty, IsArray, IsNotEmpty } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber, ArrayNotEmpty, IsArray, IsNotEmpty, IsBoolean } from 'class-validator';
 import { SellPoint } from '../../entities/sellPoint.entity';
 import { Image } from '../../entities/image.entity';
 
@@ -34,5 +34,9 @@ export class CreateEventDto {
   @IsOptional()
   @IsArray()
   poster_oldPhotos: Image[];
+
+  @IsOptional()
+  @IsBoolean()
+  isConfirmed: boolean;
   
 }

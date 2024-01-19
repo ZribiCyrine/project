@@ -4,16 +4,7 @@ import { Event } from "./event.entity";
 
 @Entity('confirmedevent')
 export class ConfirmedEvent extends Event{
-    @Column({ type: 'datetime'})
-    confirmedDate: Date;
-
-    @BeforeInsert()
-    setConfirmedDate() {
-        if (!this.confirmedDate) {
-            this.confirmedDate = new Date();
-        }
-    }
-
+   
     @OneToMany(() => Ticket, ticket => ticket.confirmedEvent, {
         cascade: true 
     })

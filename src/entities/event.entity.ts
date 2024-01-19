@@ -41,10 +41,14 @@ export class Event extends Date{
     })
     poster_oldPhotos: Image[];
 
-    @ManyToOne(() => Creator, creator => creator.events)
+    @ManyToOne(() => Creator, creator => creator.events, {
+        eager: true
+    })
     creator: Creator;
 
-    @ManyToOne(() => Admin, admin => admin.events)
+    @ManyToOne(() => Admin, admin => admin.events, {
+        eager: true
+    })
     admin: Admin
 
     @Column({ default: false })

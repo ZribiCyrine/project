@@ -7,6 +7,11 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
+  @Post('accept/:id')
+  acceptEvent(@Param('id') id: number){
+    return this.eventService.acceptEvent(+id);
+  }
+
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventService.create(createEventDto);
