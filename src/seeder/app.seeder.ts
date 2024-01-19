@@ -16,6 +16,7 @@ import { Event } from '../entities/event.entity';
 import { Image } from '../entities/image.entity';
 import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
+import { ImageService } from '../image/image.service';
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -26,6 +27,8 @@ async function bootstrap() {
         const creatorService = app.get(CreatorService);
         const participantService = app.get(ParticipantService);
         const eventService = app.get(EventService);
+        const imageService = app.get(ImageService);
+
 
         const admins = [];
         for (let i = 0; i < 20; i++) {
@@ -91,7 +94,7 @@ async function bootstrap() {
             event.address = falso.randStreetAddress();
             event.capacity = falso.randNumber({ min: 50, max: 500 });
             event.rules = rules[Math.floor(Math.random() * 3)];
-            event.ticketPrice = falso.randFloat({ min: 40, max: 120 });
+            event.ticketPrice = falso.randNumber({ min: 40, max: 120 });
 
             const nbSellPoints = Math.floor(Math.random() * sellPoints.length) + 1;
             event.sellPoints = sellPoints.sort(() => 0.5 - Math.random()).slice(0, nbSellPoints);
@@ -107,7 +110,8 @@ async function bootstrap() {
             const image = new Image();
             image.url = falso.randUrl();
             image.event = events[Math.floor(Math.random() * events.length)];
-            images.push(image);
+            const newImage = await imageService.create(image);
+            images.push(newImage);
         }
         await app.close();
     } catch (error) {

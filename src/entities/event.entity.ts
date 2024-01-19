@@ -25,7 +25,7 @@ export class Event extends Date{
     @Column({ type: 'text', nullable: true }) 
     rules: string;
 
-    @Column({ type: 'float' })
+    @Column({ type: 'int' })
     ticketPrice: number;
 
     @ManyToMany(() => SellPoint, sellPoint => sellPoint.events, {

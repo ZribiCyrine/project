@@ -8,7 +8,6 @@ import { ParticipantModule } from './participant/participant.module';
 import { EventModule } from './event/event.module';
 import { ConfirmedEventModule } from './confirmed-event/confirmed-event.module';
 import { TicketModule } from './ticket/ticket.module';
-import { PersonModule } from './person/person.module';
 import { SellPointModule } from './sell-point/sell-point.module';
 import { ImageModule } from './image/image.module';
 import { Admin } from './entities/admin.entity';
@@ -44,7 +43,6 @@ import { Image } from './entities/image.entity';
     EventModule,
     ConfirmedEventModule,
     TicketModule,
-    PersonModule,
     SellPointModule,
     ImageModule
   ],
