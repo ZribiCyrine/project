@@ -7,7 +7,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 export class EventController {
   constructor(private readonly eventService: EventService) {}
 
-  @Post('accept/:id')
+  @Patch('accept/:id')
   acceptEvent(@Param('id') id: number){
     return this.eventService.acceptEvent(+id);
   }
@@ -28,6 +28,11 @@ export class EventController {
     const creatorId = req.user.id; 
     const events = await this.eventService.findEventsByCreator(creatorId);
     return events;
+  }
+
+  @Get('/confirmed')
+  async getConfirmedEvents(){
+    return this.eventService.getConfirmedEvents();
   }
 
   @Get()

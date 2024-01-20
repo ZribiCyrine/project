@@ -17,9 +17,6 @@ import { SellPoint } from './entities/sellPoint.entity';
 import { Ticket } from './entities/ticket.entity';
 import { Image } from './entities/image.entity';
 
-import { AuthModule } from './auth/auth.module';
-
-
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -45,7 +42,6 @@ import { AuthModule } from './auth/auth.module';
     TicketModule,
     SellPointModule,
     ImageModule,
-    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],

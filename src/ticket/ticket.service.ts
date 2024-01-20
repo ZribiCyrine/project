@@ -13,7 +13,7 @@ export class TicketService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketRepository: Repository<Ticket>,
-    private readonly eventService: EventService
+    private readonly eventService: EventService,
   ) { }
 
   async create(createTicketDto: CreateTicketDto): Promise<Ticket> {

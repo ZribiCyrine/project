@@ -6,7 +6,7 @@ import { Participant } from '../entities/participant.entity';
 
 @Controller('ticket')
 export class TicketController {
-  constructor(private readonly ticketService: TicketService) {}
+  constructor(private readonly ticketService: TicketService) { }
 
   @Post()
   create(@Body() createTicketDto: CreateTicketDto) {
@@ -19,8 +19,8 @@ export class TicketController {
   }
 
   @Get('/participant')
-  async getParticipantTickets(@Req() req){
-    const participantId = req.user.id; 
+  async getParticipantTickets(@Req() req) {
+    const participantId = req.user.id;
     const tickets = await this.ticketService.findParticipantTickets(participantId);
     return tickets;
   }
@@ -30,20 +30,20 @@ export class TicketController {
     return this.ticketService.findOne(+id);
   }
 
-  /*@Post('/buy/:eventId')
-  async buyTicket(@Req() req, @Param('eventId') eventId: number){
+  @Post('/buy/:eventId')
+  async buyTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
     const ticket = await this.ticketService.buyTicket(participant, eventId);
     return ticket;
   }
 
   @Post('/reserve/:eventId')
-  async reserveTicket(@Req() req, @Param('eventId') eventId: number){
+  async reserveTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
     const ticket = await this.ticketService.reserveTicket(participant, eventId);
     return ticket;
-  }*/
-  
+  }
+
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
     return this.ticketService.update(+id, updateTicketDto);

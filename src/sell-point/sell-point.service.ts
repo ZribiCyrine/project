@@ -22,6 +22,13 @@ export class SellPointService {
     return await this.sellPointRepository.find();
   }
 
+  async findSellPointsByEvent(eventId: number): Promise<SellPoint[]> {
+    return await this.sellPointRepository
+      .createQueryBuilder('sellPoint')
+      .where('sellPoint.event.id = :eventId', { eventId })
+      .getMany();
+  }
+  
   async findOne(id: number): Promise<SellPoint> {
     const sellPoint = await this.sellPointRepository.findOne({ where: { id: id } });
     if (!sellPoint) {

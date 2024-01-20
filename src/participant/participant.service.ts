@@ -4,9 +4,6 @@ import { Participant } from "../entities/participant.entity";
 import { Repository } from "typeorm";
 import { CreateParticipantDto } from "./dto/create-participant.dto";
 import { UpdateParticipantDto } from "./dto/update-participant.dto";
-import { JwtService } from "@nestjs/jwt";
-import * as bcrypt from 'bcrypt';
-import { LoginCredentialsDto } from "../auth/dto/login-credentials.dto";
 
 @Injectable()
 export class ParticipantService {

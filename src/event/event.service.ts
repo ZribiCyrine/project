@@ -30,6 +30,13 @@ export class EventService {
       .getMany();
   }
 
+  async getConfirmedEvents(): Promise<Event[]> {
+    return await this.eventRepository
+      .createQueryBuilder('event')
+      .where('event.isConfirmed = :isConfirmed', { isConfirmed: true })
+      .getMany();
+  }
+
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
     return await this.eventRepository.find({ where: { creator: { id: creatorId } } });
   }
