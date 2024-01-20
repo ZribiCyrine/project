@@ -89,15 +89,20 @@ async function bootstrap() {
         }
 
         const events = [];
-        const rules = ['Alcohol allowed', 'Alcohol prohibited', '+18'];
+        const alcoholRules = ['Alcohol allowed', 'Alcohol prohibited'];
+        const ageRules = ['+18', 'Int 12', 'public'];
+        const dressCode = ['Casual Chic', 'Color Theme', 'Vintage','Elegant Sports Wear']
         for (let i = 0; i < 20; i++) {
             const event = new Event();
             event.name = falso.randWord();
             event.type = falso.randMusicGenre();
             event.address = falso.randStreetAddress();
             event.capacity = falso.randNumber({ min: 50, max: 500 });
-            event.rules = rules[Math.floor(Math.random() * 3)];
+            event.alcoholRules = alcoholRules[Math.floor(Math.random() * 2)];
+            event.ageRules = ageRules[Math.floor(Math.random() * 3)];
+            event.dressCode = dressCode[Math.floor(Math.random() * 4)];
             event.ticketPrice = falso.randNumber({ min: 40, max: 120 });
+            event.eventDate = falso.randSoonDate();
 
             const nbSellPoints = Math.floor(Math.random() * sellPoints.length) + 1;
             event.sellPoints = sellPoints.sort(() => 0.5 - Math.random()).slice(0, nbSellPoints);

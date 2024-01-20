@@ -23,4 +23,8 @@ export class CreatePersonDto {
     @IsEmail()
     email: string;
 
+    @IsNotEmpty()
+    @IsString()
+    password: string;
+
 }

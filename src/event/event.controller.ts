@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
@@ -15,6 +15,19 @@ export class EventController {
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventService.create(createEventDto);
+  }
+
+  @Get('/recent')
+  getRecentEvents() {
+    return this.eventService.getRecentEvents();
+  }
+
+  //@UseGuards(JwtAuthGuard)
+  @Get('/my-events')
+  async getMyEvents(@Req() req) {
+    const creatorId = req.user.id; 
+    const events = await this.eventService.findEventsByCreator(creatorId);
+    return events;
   }
 
   @Get()

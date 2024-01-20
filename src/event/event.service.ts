@@ -8,11 +8,15 @@ import { ConfirmedEventService } from '../confirmed-event/confirmed-event.servic
 
 @Injectable()
 export class EventService {
+  private eventService: EventService;
+
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-    private readonly confirmedEventService: ConfirmedEventService
-  ) {}
+    private readonly confirmedEventService: ConfirmedEventService,
+  ) {
+    this.confirmedEventService.setEventService(this);
+  }
 
   async create(createEventDto: CreateEventDto): Promise<Event> {
     const event = this.eventRepository.create(createEventDto);
@@ -21,6 +25,18 @@ export class EventService {
 
   async findAll(): Promise<Event[]> {
     return await this.eventRepository.find();
+  }
+
+  async getRecentEvents(): Promise<Event[]> {
+    const currentDate = new Date();
+    return await this.eventRepository
+      .createQueryBuilder('event')
+      .where('event.eventDate >= :currentDate', { currentDate })
+      .getMany();
+  }
+
+  async findEventsByCreator(creatorId: number): Promise<Event[]> {
+    return await this.eventRepository.find({ where: { creator: { id: creatorId } } });
   }
 
   async findOne(id: number): Promise<Event> {

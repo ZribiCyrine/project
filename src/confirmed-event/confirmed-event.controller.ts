@@ -1,16 +1,16 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { ConfirmedEventService } from './confirmed-event.service';
-import { CreateConfirmedEventDto } from './dto/create-confirmed-event.dto';
 import { UpdateConfirmedEventDto } from './dto/update-confirmed-event.dto';
+import { CreateConfirmedEventDto } from './dto/create-confirmed-event.dto';
 
 @Controller('confirmed-event')
 export class ConfirmedEventController {
   constructor(private readonly confirmedEventService: ConfirmedEventService) {}
 
-  /*@Post()
+  @Post()
   create(@Body() createConfirmedEventDto: CreateConfirmedEventDto) {
     return this.confirmedEventService.create(createConfirmedEventDto);
-  }*/
+  }
 
   @Get()
   findAll() {
@@ -30,5 +30,10 @@ export class ConfirmedEventController {
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.confirmedEventService.remove(+id);
+  }
+
+  @Delete('softDelete/:id')
+  softDelete(@Param('id') id: string) {
+    return this.confirmedEventService.softDelete(+id);
   }
 }

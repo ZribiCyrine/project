@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from "typeorm";
+import { Entity, OneToMany } from "typeorm";
 import { Event } from "./event.entity";
 import { Person } from "./person.entity";
 

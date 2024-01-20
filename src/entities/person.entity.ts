@@ -1,9 +1,9 @@
 import { Role } from "../enum/role.enum";
 import { PrimaryGeneratedColumn, Column, Entity, BeforeInsert } from 'typeorm';
-import { Date } from "./date.entity";
 import * as bcrypt from 'bcrypt';
+import { BaseDate } from "./baseDate.entity";
 
-export class Person extends Date {
+export class Person extends BaseDate {
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -25,12 +25,6 @@ export class Person extends Date {
     @Column({ select: false })
     password: string;
 
-    @BeforeInsert()
-    async hashPassword() {
-        const salt = await bcrypt.genSalt();
-        this.password = await bcrypt.hash (this.password, salt);    
-    }
-    
     @Column({ type: 'varchar' })
     role: Role;
 }

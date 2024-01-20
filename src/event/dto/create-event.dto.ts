@@ -19,9 +19,17 @@ export class CreateEventDto {
   @IsInt()
   capacity: number;
 
-  @IsOptional()
+  @IsNotEmpty()
   @IsString()
-  rules: string;
+  alcoholRules: string;
+
+  @IsNotEmpty()
+  @IsString()
+  ageRules: string;
+
+  @IsNotEmpty()
+  @IsString()
+  dressCode: string;
 
   @IsNotEmpty()
   @IsNumber()
@@ -31,7 +39,7 @@ export class CreateEventDto {
   @IsArray()
   sellPoints: SellPoint[];
   
-  @IsOptional()
+  @ArrayNotEmpty()
   @IsArray()
   poster_oldPhotos: Image[];
 

@@ -3,17 +3,24 @@ import { UpdateConfirmedEventDto } from './dto/update-confirmed-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ConfirmedEvent } from '../entities/confirmedEvent.entity';
 import { Repository } from 'typeorm';
-import { Event } from '../entities/event.entity';
+import { CreateConfirmedEventDto } from './dto/create-confirmed-event.dto';
+import { EventService } from '../event/event.service';
 
 @Injectable()
-export class ConfirmedEventService {
+export class ConfirmedEventService{
+  private eventService: EventService | undefined; 
+
   constructor(
     @InjectRepository(ConfirmedEvent)
     private readonly confirmedEventRepository: Repository<ConfirmedEvent>,
   ) {}
 
-  async create(event: Event): Promise<ConfirmedEvent> {
-    const confirmedEvent = this.confirmedEventRepository.create(event);
+  setEventService(eventService: EventService): void {
+    this.eventService = eventService;
+  }
+
+  async create(createConfirmedEventDto: CreateConfirmedEventDto): Promise<ConfirmedEvent> {
+    const confirmedEvent = this.confirmedEventRepository.create(createConfirmedEventDto);
     return await this.confirmedEventRepository.save(confirmedEvent);
   }
 
@@ -32,6 +39,10 @@ export class ConfirmedEventService {
   async update(id: number, updateConfirmedEventDto: UpdateConfirmedEventDto): Promise<ConfirmedEvent> {
     this.confirmedEventRepository.update(id, updateConfirmedEventDto);
     return await this.findOne(id);
+  }
+
+  async softDelete(id: number): Promise<void> {
+    await this.confirmedEventRepository.softDelete(id);
   }
 
   async remove(id: number): Promise<void> {

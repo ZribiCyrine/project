@@ -1,12 +1,12 @@
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
-import { Date } from "./date.entity";
 import { SellPoint } from "./sellPoint.entity";
 import { Image } from "./image.entity";
 import { Creator } from "./creator.entity";
 import { Admin } from "./admin.entity";
+import { BaseDate} from "./baseDate.entity";
 
 @Entity('event')
-export class Event extends Date{
+export class Event extends BaseDate{
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -22,11 +22,20 @@ export class Event extends Date{
     @Column({ type: 'int' })
     capacity: number;
 
-    @Column({ type: 'text', nullable: true }) 
-    rules: string;
+    @Column({ type: 'varchar'}) 
+    alcoholRules: string;
+
+    @Column({ type: 'varchar'}) 
+    ageRules: string;
+
+    @Column({ type: 'varchar'}) 
+    dressCode: string;
 
     @Column({ type: 'int' })
     ticketPrice: number;
+
+    @Column({ type: 'datetime' })
+    eventDate: Date;
 
     @ManyToMany(() => SellPoint, sellPoint => sellPoint.events, {
         cascade: true,
