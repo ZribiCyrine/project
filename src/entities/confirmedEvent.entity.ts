@@ -1,6 +1,6 @@
-import { BeforeInsert, Entity, Column, OneToMany } from "typeorm";
-import { Ticket } from "./ticket.entity";
 import { Event } from "./event.entity";
+import { Entity, OneToMany } from "typeorm";
+import { Ticket } from "./ticket.entity";
 
 @Entity('confirmedevent')
 export class ConfirmedEvent extends Event{
