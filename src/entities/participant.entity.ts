@@ -1,6 +1,7 @@
 import { Entity, OneToMany } from "typeorm";
 import { Person } from "./person.entity";
 import { Ticket } from "./ticket.entity";
+import { Role } from "../enum/role.enum";
 
 @Entity('participant')
 export class Participant extends Person{
@@ -10,4 +11,8 @@ export class Participant extends Person{
     })
     tickets: Ticket[];
 
+    constructor(){
+        super();
+        this.role= Role.PARTICIPANT;
+    }
 }

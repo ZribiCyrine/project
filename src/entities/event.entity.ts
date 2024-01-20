@@ -4,6 +4,7 @@ import { Image } from "./image.entity";
 import { Creator } from "./creator.entity";
 import { Admin } from "./admin.entity";
 import { BaseDate} from "./baseDate.entity";
+import { Ticket } from "./ticket.entity";
 
 @Entity('event')
 export class Event extends BaseDate{
@@ -59,6 +60,11 @@ export class Event extends BaseDate{
         eager: true
     })
     admin: Admin
+
+    @OneToMany(() => Ticket, ticket => ticket.event, {
+        cascade: true 
+    })
+    tickets: Ticket[];
 
     @Column({ default: false })
     isConfirmed: boolean;

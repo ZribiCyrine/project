@@ -1,13 +1,18 @@
 import { Entity, OneToMany } from "typeorm";
 import { Event } from "./event.entity";
-import { Person } from "./person.entity";
+import { Role } from "../enum/role.enum";
+import { Participant } from "./participant.entity";
 
 @Entity('creator')
-export class Creator extends Person{
-    
+export class Creator extends Participant{
+
     @OneToMany(type => Event, event => event.creator, {
         cascade: true 
     })
     events: Event[];
 
+    constructor(){
+        super();
+        this.role= Role.CREATOR;
+    }
 }

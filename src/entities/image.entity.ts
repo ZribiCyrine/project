@@ -3,6 +3,7 @@ import { Event } from "./event.entity";
 
 @Entity('image')
 export class Image {
+    
     @PrimaryGeneratedColumn()
     id: number;
 

@@ -3,12 +3,13 @@ import { TicketService } from './ticket.service';
 import { TicketController } from './ticket.controller';
 import { Ticket } from '../entities/ticket.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConfirmedEvent } from '../entities/confirmedEvent.entity';
-import { ConfirmedEventService } from '../confirmed-event/confirmed-event.service';
+import { Event } from '../entities/event.entity';
+import { EventService } from '../event/event.service';
+import { EventModule } from '../event/event.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ticket, ConfirmedEvent])],
+  imports: [TypeOrmModule.forFeature([Ticket, Event]), EventModule],
   controllers: [TicketController],
-  providers: [TicketService, ConfirmedEventService],
+  providers: [TicketService, EventService],
 })
 export class TicketModule {}

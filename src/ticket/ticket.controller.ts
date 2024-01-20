@@ -30,7 +30,7 @@ export class TicketController {
     return this.ticketService.findOne(+id);
   }
 
-  @Post('/buy/:eventId')
+  /*@Post('/buy/:eventId')
   async buyTicket(@Req() req, @Param('eventId') eventId: number){
     const participant = req.user;
     const ticket = await this.ticketService.buyTicket(participant, eventId);
@@ -42,7 +42,7 @@ export class TicketController {
     const participant = req.user;
     const ticket = await this.ticketService.reserveTicket(participant, eventId);
     return ticket;
-  }
+  }*/
   
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {

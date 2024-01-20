@@ -1,16 +1,19 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { ConflictException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Participant } from "../entities/participant.entity";
 import { Repository } from "typeorm";
 import { CreateParticipantDto } from "./dto/create-participant.dto";
 import { UpdateParticipantDto } from "./dto/update-participant.dto";
+import { JwtService } from "@nestjs/jwt";
+import * as bcrypt from 'bcrypt';
+import { LoginCredentialsDto } from "../auth/dto/login-credentials.dto";
 
 @Injectable()
 export class ParticipantService {
   constructor(
     @InjectRepository(Participant)
     private readonly participantRepository: Repository<Participant>,
-  ) {}
+  ) { }
 
   async create(createParticipantDto: CreateParticipantDto): Promise<Participant> {
     const participant = this.participantRepository.create(createParticipantDto);

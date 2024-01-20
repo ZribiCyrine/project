@@ -1,8 +1,8 @@
 import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Participant } from "./participant.entity";
-import { ConfirmedEvent } from "./confirmedEvent.entity";
 import { BaseDate } from "./baseDate.entity";
 import { TicketStatus } from "../enum/ticketStatus.enum";
+import { Event } from "./event.entity";
 
 @Entity('ticket')
 export class Ticket extends BaseDate {
@@ -15,7 +15,6 @@ export class Ticket extends BaseDate {
     @ManyToOne(() => Participant, participant => participant.tickets)
     participant: Participant;
 
-    @ManyToOne(() => ConfirmedEvent, confirmedEvent => confirmedEvent.tickets)
-    confirmedEvent: ConfirmedEvent;
-
+    @ManyToOne(() => Event, event => event.tickets)
+    event: Event;
 }

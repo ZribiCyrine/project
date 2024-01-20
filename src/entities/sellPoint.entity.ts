@@ -3,6 +3,7 @@ import { Event } from "./event.entity";
 
 @Entity('sellpoint')
 export class SellPoint{
+    
     @PrimaryGeneratedColumn()
     id: number;
 

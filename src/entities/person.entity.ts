@@ -1,9 +1,9 @@
 import { Role } from "../enum/role.enum";
 import { PrimaryGeneratedColumn, Column, Entity, BeforeInsert } from 'typeorm';
-import * as bcrypt from 'bcrypt';
 import { BaseDate } from "./baseDate.entity";
 
 export class Person extends BaseDate {
+    
     @PrimaryGeneratedColumn()
     id: number;
 
@@ -24,6 +24,9 @@ export class Person extends BaseDate {
 
     @Column({ select: false })
     password: string;
+
+    @Column({ type: 'varchar' })
+    salt: string;
 
     @Column({ type: 'varchar' })
     role: Role;
