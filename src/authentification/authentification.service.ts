@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
@@ -42,38 +42,32 @@ export class AuthentificationService {
     return participant;
   }
 
-  async login(credentials:LoginCredentialsDto) {
+  async login(credentials: LoginCredentialsDto) {
     if (!credentials || !credentials.email || !credentials.password) {
       throw new BadRequestException('Invalid credentials provided.');
     }
-  
-    //recupere le login et le mdp
-    const{email,password}=credentials;
-  
-    const participant=await this.participantRepository.createQueryBuilder("participant")
-    .where("participant.email= :email or participant.password= :email",
-    {email})
-    .getOne();
-  
-    if(!participant)
-       throw  new NotFoundException( 'email ou password erronée');
-    
-    const hashedPassword= await bcrypt.hash(password, participant.salt);
-    if( hashedPassword == participant.password){
-      const payload=  {
-        name:participant.name,
-        firstname:participant.firstname,
-        email:participant.email
-        };
-      const jwt=await this.jwtService.sign(payload);
-      return {
-        "access_token":jwt
-      }
-  
+    const { email, password } = credentials;
+    const participant = await this.participantService.getParticipantByEmail(email);
+    console.log(participant);
+    if (!participant) {
+      throw new NotFoundException('Email or password incorrect.');
     }
-    else{
-      throw  new NotFoundException( 'email ou password erronée');
-    
+    const hashedPassword = await bcrypt.hash(credentials.password, participant.salt);
+    const passwordMatch = participant.password == hashedPassword;
+
+    console.log(passwordMatch);
+    if (passwordMatch) {
+      const payload = {
+        name: participant.name,
+        firstname: participant.firstname,
+        email: participant.email,
+      };
+      const accessToken = await this.jwtService.sign(payload);
+      return {
+        "access_token": accessToken,
+      };
+    } else {
+      throw new NotFoundException('Email or password incorrect.');
     }
   }
 

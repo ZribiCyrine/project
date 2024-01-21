@@ -17,6 +17,8 @@ import { SellPoint } from './entities/sellPoint.entity';
 import { Ticket } from './entities/ticket.entity';
 import { Image } from './entities/image.entity';
 import { AuthentificationModule } from './authentification/authentification.module';
+import { JwtModule } from '@nestjs/jwt';
+import { ConfigModule } from '@nestjs/config';
 
 @Module({
   imports: [
@@ -36,6 +38,15 @@ import { AuthentificationModule } from './authentification/authentification.modu
         encrypt: true
       }
     }),
+    JwtModule.register({
+      secret: process.env.SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+
+    ConfigModule.forRoot({
+      isGlobal: true,
+    }),
+
     AdminModule,
     CreatorModule,
     ParticipantModule,

@@ -14,7 +14,7 @@ export class AuthentificationController {
   }
 
   @Post('/login')
-  login(credentials: LoginCredentialsDto) {
+  login(@Body() credentials: LoginCredentialsDto) {
     return this.authentificationService.login(credentials)
   }
 
