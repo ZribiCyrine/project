@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, Injectable, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Image } from "../entities/image.entity";
 import { Repository } from "typeorm";
@@ -13,12 +13,22 @@ export class ImageService {
   ) {}
 
   async create(createImageDto: CreateImageDto): Promise<Image> {
-    const participant = this.imageRepository.create(createImageDto);
-    return await this.imageRepository.save(participant);
+    try {
+      const image = this.imageRepository.create(createImageDto);
+      return await this.imageRepository.save(image);
+    } catch (error) {
+      throw new BadRequestException('Unable to create image.');
+    }
   }
 
   async findAll(): Promise<Image[]> {
     return await this.imageRepository.find();
+  }
+  
+  async findByEventId(eventId: number): Promise<Image[]> {
+    return await this.imageRepository.find({
+      where: { event: { id: eventId } },
+    });
   }
 
   async findOne(id: number): Promise<Image> {

@@ -31,19 +31,30 @@ async function bootstrap() {
 
 
         const admins = [];
-        for (let i = 0; i < 20; i++) {
-            const admin = new Admin();
-            admin.name = falso.randLastName();
-            admin.firstname = falso.randFirstName();
-            admin.cin = falso.randNumber({ min: 10000000, max: 99999999 });
-            admin.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
-            admin.email = falso.randEmail();
-            admin.password = falso.randPassword();
-            admin.salt= falso.randWord();
-            admin.role = Role.ADMIN;
-            const newAdmin = await adminService.create(admin);
-            admins.push(newAdmin);
-        }
+        const admin1 = new Admin();
+        admin1.firstname = "cyrine";
+        admin1.name = "zribi";
+        admin1.cin = 11223344;
+        admin1.phoneNumber = 52712485;
+        admin1.email = "cyrinezribi23@gmail.com";
+        admin1.password = "cyrine123";
+        admin1.salt= falso.randWord();
+        admin1.role = Role.ADMIN;
+        const newAdmin1 = await adminService.create(admin1);
+        admins.push(newAdmin1);
+
+        const admin2 = new Admin();
+        admin2.firstname = "salim";
+        admin2.name = "ben omrane";
+        admin2.cin = 55667788;
+        admin2.phoneNumber = 51181080;
+        admin2.email = "salimbenomrane@gmail.com";
+        admin2.password = "salim123";
+        admin2.salt= falso.randWord();
+        admin2.role = Role.ADMIN;
+        const newAdmin2 = await adminService.create(admin2);
+        admins.push(newAdmin2);
+
 
         const creators = [];
         for (let i = 0; i < 20; i++) {
@@ -54,7 +65,7 @@ async function bootstrap() {
             creator.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             creator.email = falso.randEmail();
             creator.password = falso.randPassword();
-            creator.salt= falso.randWord();
+            creator.salt = falso.randWord();
             creator.role = Role.CREATOR;
             const newCreator = await creatorService.create(creator);
             creators.push(newCreator);
@@ -69,7 +80,7 @@ async function bootstrap() {
             participant.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             participant.email = falso.randEmail();
             participant.password = falso.randPassword();
-            participant.salt= falso.randWord();
+            participant.salt = falso.randWord();
             participant.role = Role.PARTICIPANT;
             const newParticipant = await participantService.create(participant);
             participants.push(newParticipant);
@@ -94,7 +105,7 @@ async function bootstrap() {
         const events = [];
         const alcoholRules = ['Alcohol allowed', 'Alcohol prohibited'];
         const ageRules = ['+18', 'Int 12', 'public'];
-        const dressCode = ['Casual Chic', 'Color Theme', 'Vintage','Elegant Sports Wear']
+        const dressCode = ['Casual Chic', 'Color Theme', 'Vintage', 'Elegant Sports Wear']
         for (let i = 0; i < 20; i++) {
             const event = new Event();
             event.name = falso.randWord();
@@ -119,7 +130,7 @@ async function bootstrap() {
         const images = [];
         for (let i = 0; i < 20; i++) {
             const image = new Image();
-            image.url = falso.randUrl();
+            image.data = null;
             image.event = events[Math.floor(Math.random() * events.length)];
             const newImage = await imageService.create(image);
             images.push(newImage);

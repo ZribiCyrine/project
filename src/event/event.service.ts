@@ -22,11 +22,12 @@ export class EventService {
     return await this.eventRepository.find();
   }
 
-  async getRecentEvents(): Promise<Event[]> {
+  async getRecentNonConfirmedEvents(): Promise<Event[]> {
     const currentDate = new Date();
     return await this.eventRepository
       .createQueryBuilder('event')
       .where('event.eventDate >= :currentDate', { currentDate })
+      .andWhere('event.isConfirmed = :isConfirmed', { isConfirmed: false })
       .getMany();
   }
 

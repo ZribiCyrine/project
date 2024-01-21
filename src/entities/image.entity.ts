@@ -3,12 +3,16 @@ import { Event } from "./event.entity";
 
 @Entity('image')
 export class Image {
-    
+
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar'})
-    url: string;
+    @Column({
+        type: 'varbinary',
+        length: 'max',
+        nullable: false,
+    })
+    data: Buffer;
 
     @ManyToOne(() => Event, event => event.poster_oldPhotos)
     event: Event;

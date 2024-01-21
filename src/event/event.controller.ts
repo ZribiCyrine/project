@@ -18,8 +18,8 @@ export class EventController {
   }
 
   @Get('/recent')
-  getRecentEvents() {
-    return this.eventService.getRecentEvents();
+  getRecentNonConfirmedEvents() {
+    return this.eventService.getRecentNonConfirmedEvents();
   }
 
   //@UseGuards(JwtAuthGuard)
