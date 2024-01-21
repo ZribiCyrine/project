@@ -17,6 +17,7 @@ import { Image } from '../entities/image.entity';
 import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
 import { ImageService } from '../image/image.service';
+import { SellPointService } from '../sell-point/sell-point.service';
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -28,6 +29,7 @@ async function bootstrap() {
         const participantService = app.get(ParticipantService);
         const eventService = app.get(EventService);
         const imageService = app.get(ImageService);
+        const sellPointService = app.get(SellPointService);
 
 
         const admins = [];
@@ -38,7 +40,7 @@ async function bootstrap() {
         admin1.phoneNumber = 52712485;
         admin1.email = "cyrinezribi23@gmail.com";
         admin1.password = "cyrine123";
-        admin1.salt= falso.randWord();
+        admin1.salt = falso.randWord();
         admin1.role = Role.ADMIN;
         const newAdmin1 = await adminService.create(admin1);
         admins.push(newAdmin1);
@@ -50,7 +52,7 @@ async function bootstrap() {
         admin2.phoneNumber = 51181080;
         admin2.email = "salimbenomrane@gmail.com";
         admin2.password = "salim123";
-        admin2.salt= falso.randWord();
+        admin2.salt = falso.randWord();
         admin2.role = Role.ADMIN;
         const newAdmin2 = await adminService.create(admin2);
         admins.push(newAdmin2);
@@ -92,24 +94,36 @@ async function bootstrap() {
             sellPoint.name = falso.randCompanyName();
             sellPoint.address = falso.randFullAddress();
             sellPoint.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
-            sellPoints.push(sellPoint);
+            const newSellPoint = await sellPointService.create(sellPoint);
+            sellPoints.push(newSellPoint);
         }
 
-        const tickets = [];
+        /*const tickets = [];
         for (let i = 0; i < 20; i++) {
             const ticket = new Ticket();
             ticket.participant = participants[Math.floor(Math.random() * participants.length)];
             tickets.push(ticket);
+        }*/
+
+        const images = [];
+        for (let i = 0; i < 20; i++) {
+            const image = new Image();
+            const imageData = Buffer.from(falso.randUrl(), 'base64');
+            image.data = imageData;
+            const newImage = await imageService.create(image);
+            images.push(newImage);
         }
 
         const events = [];
-        const alcoholRules = ['Alcohol allowed', 'Alcohol prohibited'];
-        const ageRules = ['+18', 'Int 12', 'public'];
-        const dressCode = ['Casual Chic', 'Color Theme', 'Vintage', 'Elegant Sports Wear']
+        const alcoholRules = ['Alcool autorisé', 'Alcool interdit'];
+        const ageRules = ['+18', '12 ans et plus', 'Tout public'];
+        const dressCode = ['Décontracté', 'Créatif', 'Vintage', 'Cocktail'];
+
         for (let i = 0; i < 20; i++) {
             const event = new Event();
             event.name = falso.randWord();
             event.type = falso.randMusicGenre();
+            event.lineUp = falso.randSinger();
             event.address = falso.randStreetAddress();
             event.capacity = falso.randNumber({ min: 50, max: 500 });
             event.alcoholRules = alcoholRules[Math.floor(Math.random() * 2)];
@@ -117,24 +131,20 @@ async function bootstrap() {
             event.dressCode = dressCode[Math.floor(Math.random() * 4)];
             event.ticketPrice = falso.randNumber({ min: 40, max: 120 });
             event.eventDate = falso.randSoonDate();
-
-            const nbSellPoints = Math.floor(Math.random() * sellPoints.length) + 1;
-            event.sellPoints = sellPoints.sort(() => 0.5 - Math.random()).slice(0, nbSellPoints);
-
+            event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
+            event.image = images[i];
             event.creator = creators[Math.floor(Math.random() * creators.length)];
             event.admin = admins[Math.floor(Math.random() * admins.length)];
-            const newEvent = await eventService.create(event);
-            events.push(newEvent);
+            try {
+                const newEvent = await eventService.create(event);
+                events.push(newEvent);
+            } catch (error) {
+                Logger.error(`Error creating event: ${error.message}`);
+            }
         }
+        
 
-        const images = [];
-        for (let i = 0; i < 20; i++) {
-            const image = new Image();
-            image.data = null;
-            image.event = events[Math.floor(Math.random() * events.length)];
-            const newImage = await imageService.create(image);
-            images.push(newImage);
-        }
+
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);

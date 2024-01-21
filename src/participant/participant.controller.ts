@@ -5,7 +5,7 @@ import { UpdateParticipantDto } from './dto/update-participant.dto';
 
 @Controller('participant')
 export class ParticipantController {
-  constructor(private readonly participantService: ParticipantService) {}
+  constructor(private readonly participantService: ParticipantService) { }
 
   @Post()
   create(@Body() createParticipantDto: CreateParticipantDto) {
@@ -17,6 +17,20 @@ export class ParticipantController {
     return this.participantService.findAll();
   }
 
+  @Get(':email')
+  async getParticipantByEmail(@Param('email') email: string) {
+    try {
+      const participant = await this.participantService.getParticipantByEmail(email);
+      if (participant) {
+        return { success: true, participant };
+      } else {
+        return { success: false, message: 'Participant not found' };
+      }
+    } catch (error) {
+      return { success: false, message: 'Error retrieving participant' };
+    }
+  }
+  
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.participantService.findOne(+id);

@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm";
 import { Event } from "./event.entity";
 
 @Entity('sellpoint')
@@ -16,6 +16,8 @@ export class SellPoint{
     @Column({ type: 'bigint' })
     phoneNumber: number;
 
-    @ManyToMany(()=>Event, event => event.sellPoints)
+    @OneToMany(() => Event, event => event.sellPoint, {
+        cascade: true,
+    })
     events: Event[];
 }

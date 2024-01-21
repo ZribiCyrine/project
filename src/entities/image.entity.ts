@@ -1,4 +1,4 @@
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, ManyToOne, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Event } from "./event.entity";
 
 @Entity('image')
@@ -14,6 +14,6 @@ export class Image {
     })
     data: Buffer;
 
-    @ManyToOne(() => Event, event => event.poster_oldPhotos)
+    @OneToOne(() => Event, event => event.image)
     event: Event;
 }

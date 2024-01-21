@@ -4,6 +4,7 @@ import { UpdateEventDto } from './dto/update-event.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
+import { EventStatus } from '../enum/eventStatus.enum';
 
 @Injectable()
 export class EventService {
@@ -59,9 +60,15 @@ export class EventService {
     await this.eventRepository.delete(id);
   }
 
+  async rejectEvent(id: number): Promise<void> {
+    const event = await this.findOne(id);
+    event.status = EventStatus.REJECTED;
+    await this.eventRepository.save(event)
+  }
+
   async acceptEvent(id: number): Promise<void> {
     const event = await this.findOne(id);
-    event.isConfirmed = true;
+    event.status = EventStatus.CONFIRMED;
     await this.eventRepository.save(event)
   }
 }

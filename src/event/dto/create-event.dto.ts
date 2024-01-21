@@ -13,6 +13,10 @@ export class CreateEventDto {
 
   @IsNotEmpty()
   @IsString()
+  lineUp: string;
+
+  @IsNotEmpty()
+  @IsString()
   address: string;
 
   @IsNotEmpty()
@@ -35,16 +39,10 @@ export class CreateEventDto {
   @IsNumber()
   ticketPrice: number;
 
-  @ArrayNotEmpty()
-  @IsArray()
-  sellPoints: SellPoint[];
+  @IsNotEmpty()
+  sellPoint: SellPoint;
   
-  @ArrayNotEmpty()
-  @IsArray()
-  poster_oldPhotos: Image[];
+  @IsNotEmpty()
+  image: Image;
 
-  @IsOptional()
-  @IsBoolean()
-  isConfirmed: boolean;
-  
 }

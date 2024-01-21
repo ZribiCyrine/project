@@ -1,35 +1,39 @@
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryGeneratedColumn } from "typeorm";
 import { SellPoint } from "./sellPoint.entity";
 import { Image } from "./image.entity";
 import { Creator } from "./creator.entity";
 import { Admin } from "./admin.entity";
-import { BaseDate} from "./baseDate.entity";
+import { BaseDate } from "./baseDate.entity";
 import { Ticket } from "./ticket.entity";
+import { EventStatus } from "../enum/eventStatus.enum";
 
 @Entity('event')
-export class Event extends BaseDate{
+export class Event extends BaseDate {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar'})
+    @Column({ type: 'varchar' })
     name: string;
 
-    @Column({ type: 'varchar'})
+    @Column({ type: 'varchar' })
     type: string;
 
-    @Column({ type: 'varchar'})
+    @Column({ type: 'varchar' })
+    lineUp: string;
+
+    @Column({ type: 'varchar' })
     address: string;
 
     @Column({ type: 'int' })
     capacity: number;
 
-    @Column({ type: 'varchar'}) 
+    @Column({ type: 'varchar' })
     alcoholRules: string;
 
-    @Column({ type: 'varchar'}) 
+    @Column({ type: 'varchar' })
     ageRules: string;
 
-    @Column({ type: 'varchar'}) 
+    @Column({ type: 'varchar' })
     dressCode: string;
 
     @Column({ type: 'int' })
@@ -38,18 +42,17 @@ export class Event extends BaseDate{
     @Column({ type: 'datetime' })
     eventDate: Date;
 
-    @ManyToMany(() => SellPoint, sellPoint => sellPoint.events, {
+    @ManyToOne(() => SellPoint, sellPoint => sellPoint.events, {
+        eager: true,
+    })
+    sellPoint: SellPoint;
+
+    @OneToOne(() => Image, {
         cascade: true,
         eager: true
     })
-    @JoinTable()
-    sellPoints: SellPoint[];
-    
-    @OneToMany(() => Image, poster_oldPhoto => poster_oldPhoto.event, {
-        cascade: true,
-        eager: true
-    })
-    poster_oldPhotos: Image[];
+    @JoinColumn()
+    image: Image;
 
     @ManyToOne(() => Creator, creator => creator.events, {
         eager: true
@@ -62,10 +65,10 @@ export class Event extends BaseDate{
     admin: Admin
 
     @OneToMany(() => Ticket, ticket => ticket.event, {
-        cascade: true 
+        cascade: true
     })
     tickets: Ticket[];
 
-    @Column({ default: false })
-    isConfirmed: boolean;
+    @Column({ type: 'varchar', default: EventStatus.PENDING })
+    status: EventStatus;
 }

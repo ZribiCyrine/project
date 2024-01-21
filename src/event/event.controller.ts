@@ -12,6 +12,11 @@ export class EventController {
     return this.eventService.acceptEvent(+id);
   }
 
+  @Patch('reject/:id')
+  rejectEvent(@Param('id') id: number){
+    return this.eventService.rejectEvent(+id);
+  }
+
   @Post()
   create(@Body() createEventDto: CreateEventDto) {
     return this.eventService.create(createEventDto);
