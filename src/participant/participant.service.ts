@@ -29,6 +29,13 @@ export class ParticipantService {
     return participant;
   }
 
+  async getParticipantByEmail(email: string): Promise<Participant> {
+    return await this.participantRepository.createQueryBuilder("participant")
+      .where("participant.email= :email or participant.password= :email",
+        { email })
+      .getOne();
+  }
+
   async update(id: number, updateParticipantDto: UpdateParticipantDto): Promise<Participant> {
     this.participantRepository.update(id, updateParticipantDto);
     return await this.findOne(id);

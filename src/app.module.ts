@@ -16,6 +16,7 @@ import { Event } from './entities/event.entity';
 import { SellPoint } from './entities/sellPoint.entity';
 import { Ticket } from './entities/ticket.entity';
 import { Image } from './entities/image.entity';
+import { AuthentificationModule } from './authentification/authentification.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import { Image } from './entities/image.entity';
     TicketModule,
     SellPointModule,
     ImageModule,
+    AuthentificationModule,
   ],
   controllers: [AppController],
   providers: [AppService],
