@@ -3,7 +3,7 @@ import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
 import { Admin } from '../entities/admin.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtModule, JwtService } from '@nestjs/jwt';
+import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
 
