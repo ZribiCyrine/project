@@ -63,7 +63,7 @@ export class AuthentificationService {
       console.log(process.env.JWT_SECRET);
       const jwt = this.jwtService.sign(payload, {
         secret: this.jwtSecret,
-        expiresIn: '1h',
+        expiresIn: '1d',
       });
       return {
         "access_token": jwt,

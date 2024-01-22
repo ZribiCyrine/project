@@ -18,6 +18,7 @@ import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
 import { ImageService } from '../image/image.service';
 import { SellPointService } from '../sell-point/sell-point.service';
+import * as bcrypt from 'bcrypt';
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -39,8 +40,8 @@ async function bootstrap() {
         admin1.cin = 11223344;
         admin1.phoneNumber = 52712485;
         admin1.email = "cyrinezribi23@gmail.com";
-        admin1.password = "cyrine123";
-        admin1.salt = falso.randWord();
+        admin1.salt = await bcrypt.genSalt();
+        admin1.password =  await bcrypt.hash("cyrine123", admin1.salt);
         admin1.role = Role.ADMIN;
         const newAdmin1 = await adminService.create(admin1);
         admins.push(newAdmin1);
@@ -51,12 +52,11 @@ async function bootstrap() {
         admin2.cin = 55667788;
         admin2.phoneNumber = 51181080;
         admin2.email = "salimbenomrane@gmail.com";
-        admin2.password = "salim123";
-        admin2.salt = falso.randWord();
+        admin2.salt = await bcrypt.genSalt();
+        admin2.password =  await bcrypt.hash("salim123", admin2.salt);
         admin2.role = Role.ADMIN;
         const newAdmin2 = await adminService.create(admin2);
         admins.push(newAdmin2);
-
 
         const creators = [];
         for (let i = 0; i < 20; i++) {
@@ -98,13 +98,6 @@ async function bootstrap() {
             sellPoints.push(newSellPoint);
         }
 
-        /*const tickets = [];
-        for (let i = 0; i < 20; i++) {
-            const ticket = new Ticket();
-            ticket.participant = participants[Math.floor(Math.random() * participants.length)];
-            tickets.push(ticket);
-        }*/
-
         const images = [];
         for (let i = 0; i < 20; i++) {
             const image = new Image();
@@ -143,8 +136,6 @@ async function bootstrap() {
             }
         }
         
-
-
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);

@@ -1,8 +1,7 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { CreateAdminDto } from './dto/create-admin.dto';
-import { UpdateAdminDto } from './dto/update-admin.dto';
-import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { AdminLoginCredentialsDto } from './dto/admin-login-credentials.dto';
 
 @Controller('admin')
 export class AdminController {
@@ -13,28 +12,22 @@ export class AdminController {
     return this.adminService.create(createAdminDto);
   }
 
-  @Get()
-  findAll() {
-    return this.adminService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.adminService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAdminDto: UpdateAdminDto) {
-    return this.adminService.update(+id, updateAdminDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.adminService.remove(+id);
+  @Get(':email')
+  async getParticipantByEmail(@Param('email') email: string) {
+    try {
+      const participant = await this.adminService.getAdminByEmail(email);
+      if (participant) {
+        return { success: true, participant };
+      } else {
+        return { success: false, message: 'Participant not found' };
+      }
+    } catch (error) {
+      return { success: false, message: 'Error retrieving participant' };
+    }
   }
 
   @Post('/login')
-  login(@Body() credentials: LoginCredentialsDto) {
+  login(@Body() credentials: AdminLoginCredentialsDto) {
     return this.adminService.login(credentials)
   }
 }
