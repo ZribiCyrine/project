@@ -6,9 +6,7 @@ import { Role } from "../enum/role.enum";
 @Entity('participant')
 export class Participant extends Person{
 
-    @OneToMany(()=>Ticket, ticket => ticket.participant, {
-        cascade: true 
-    })
+    @OneToMany(()=>Ticket, ticket => ticket.participant)
     tickets: Ticket[];
 
     constructor(){

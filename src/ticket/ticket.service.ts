@@ -17,6 +17,8 @@ export class TicketService {
   ) { }
 
   async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
+    console.log('Data received for creating ticket:', createTicketDto);
+
     const ticket = this.ticketRepository.create(createTicketDto);
     return await this.ticketRepository.save(ticket);
   }
@@ -37,6 +39,7 @@ export class TicketService {
     if (event.capacity <= 0) {
       throw new NotFoundException('Event is sold out.');
     }
+    console.log(participant);
     event.capacity--;
     const createTicketDto: CreateTicketDto = {
       status: TicketStatus.PAID,
