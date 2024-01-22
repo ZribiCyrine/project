@@ -8,7 +8,6 @@ import { EventStatus } from '../enum/eventStatus.enum';
 
 @Injectable()
 export class EventService {
-
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
@@ -20,7 +19,17 @@ export class EventService {
   }
 
   async findAll(): Promise<Event[]> {
-    return await this.eventRepository.find();
+    return (await this.eventRepository.find()).sort((a, b) => {
+      if (a.status === EventStatus.PENDING) {
+        return -1;
+      }
+
+      if (b.status === EventStatus.PENDING) {
+        return 1;
+      }
+
+      return a.eventDate > b.eventDate ? 1 : -1;
+    });
   }
 
   async getRecentNonConfirmedEvents(): Promise<Event[]> {
@@ -40,7 +49,9 @@ export class EventService {
   }
 
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
-    return await this.eventRepository.find({ where: { creator: { id: creatorId } } });
+    return await this.eventRepository.find({
+      where: { creator: { id: creatorId } },
+    });
   }
 
   async findOne(id: number): Promise<Event> {
@@ -63,12 +74,12 @@ export class EventService {
   async rejectEvent(id: number): Promise<void> {
     const event = await this.findOne(id);
     event.status = EventStatus.REJECTED;
-    await this.eventRepository.save(event)
+    await this.eventRepository.save(event);
   }
 
   async acceptEvent(id: number): Promise<void> {
     const event = await this.findOne(id);
     event.status = EventStatus.CONFIRMED;
-    await this.eventRepository.save(event)
+    await this.eventRepository.save(event);
   }
 }
