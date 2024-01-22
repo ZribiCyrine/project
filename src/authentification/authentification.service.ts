@@ -1,4 +1,4 @@
-import { BadRequestException, ConflictException, Injectable, NotFoundException } from "@nestjs/common";
+import { BadRequestException, ConflictException, Injectable, InternalServerErrorException, NotFoundException } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { JwtService } from "@nestjs/jwt";
@@ -7,16 +7,21 @@ import { Participant } from "../entities/participant.entity";
 import { ParticipantSubscribeDto } from "./dto/participant-subscribe.dto";
 import { LoginCredentialsDto } from "./dto/login-credentials.dto";
 import { ParticipantService } from "../participant/participant.service";
+import { ConfigService } from "@nestjs/config";
 
 
 @Injectable()
 export class AuthentificationService {
+  private jwtSecret: string;
   constructor(
     @InjectRepository(Participant)
     private readonly participantRepository: Repository<Participant>,
     private readonly participantService: ParticipantService,
-    private jwtService: JwtService
-  ) { }
+    private jwtService: JwtService,
+    private configService: ConfigService, 
+  ) {
+    this.jwtSecret = this.configService.get<string>('JWT_SECRET');
+  }
 
   async register(participantData: ParticipantSubscribeDto): Promise<Partial<Participant>> {
 
@@ -31,50 +36,40 @@ export class AuthentificationService {
     })
     participant.salt = await bcrypt.genSalt();
     participant.password = await bcrypt.hash(participant.password, participant.salt);
-    try {
-      await this.participantRepository.save(participant);
-    }
-    catch (e) {
-      throw new ConflictException('Contact details must be unique.')
-    }
+    await this.participantRepository.save(participant);
     delete participant.salt;
     delete participant.password;
     return participant;
   }
 
-  async login(credentials:LoginCredentialsDto) {
+  async login(credentials: LoginCredentialsDto){
     if (!credentials || !credentials.email || !credentials.password) {
       throw new BadRequestException('Invalid credentials provided.');
     }
-  
-    //recupere le login et le mdp
-    const{email,password}=credentials;
-  
-    const participant=await this.participantRepository.createQueryBuilder("participant")
-    .where("participant.email= :email or participant.password= :email",
-    {email})
-    .getOne();
-  
-    if(!participant)
-       throw  new NotFoundException( 'email ou password erronée');
-    
-    const hashedPassword= await bcrypt.hash(password, participant.salt);
-    if( hashedPassword == participant.password){
-      const payload=  {
-        name:participant.name,
-        firstname:participant.firstname,
-        email:participant.email
-        };
-      const jwt=await this.jwtService.sign(payload);
-      return {
-        "access_token":jwt
-      }
-  
+    const { email, password } = credentials;
+    const participant = await this.participantService.getParticipantByEmail(email);
+    if (!participant) {
+      throw new NotFoundException('Email or password incorrect.');
     }
-    else{
-      throw  new NotFoundException( 'email ou password erronée');
-    
+    const hashedPassword = await bcrypt.hash(password, participant.salt);
+    if (participant.password === 
+      
+      hashedPassword) {
+      const payload = {
+        name: participant.name,
+        firstname: participant.firstname,
+        email: participant.email,
+      };
+      console.log(process.env.JWT_SECRET);
+      const jwt = this.jwtService.sign(payload, {
+        secret: this.jwtSecret,
+        expiresIn: '1h',
+      });
+      return {
+        "access_token": jwt,
+      };
+    } else {
+      throw new NotFoundException('Email or password incorrect.');
     }
   }
-
 }

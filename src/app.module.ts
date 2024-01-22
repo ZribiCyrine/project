@@ -36,6 +36,7 @@ import { AuthentificationModule } from './authentification/authentification.modu
         encrypt: true
       }
     }),
+    
     AdminModule,
     CreatorModule,
     ParticipantModule,

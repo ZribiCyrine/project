@@ -1,7 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
+import { JwtAuthGuard } from '../authentification/guards/jwt-auth.guards';
 
 @Controller('event')
 export class EventController {
@@ -27,7 +28,7 @@ export class EventController {
     return this.eventService.getRecentNonConfirmedEvents();
   }
 
-  //@UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Get('/my-events')
   async getMyEvents(@Req() req) {
     const creatorId = req.user.id; 

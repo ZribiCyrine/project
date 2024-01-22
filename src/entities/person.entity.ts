@@ -22,7 +22,7 @@ export class Person extends BaseDate {
     @Column({ type: 'varchar' })
     email: string;
 
-    @Column({ select: false })
+    @Column({ type: 'varchar' })
     password: string;
 
     @Column({ type: 'varchar' })

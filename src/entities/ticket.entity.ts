@@ -12,9 +12,13 @@ export class Ticket extends BaseDate {
     @Column({ type: 'varchar' })
     status: TicketStatus;
 
-    @ManyToOne(() => Participant, participant => participant.tickets)
+    @ManyToOne(() => Participant, participant => participant.tickets, {
+        eager: true
+    })
     participant: Participant;
 
-    @ManyToOne(() => Event, event => event.tickets)
+    @ManyToOne(() => Event, event => event.tickets, {
+        eager: true
+    })
     event: Event;
 }

@@ -1,8 +1,8 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Req } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } from '@nestjs/common';
 import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
-import { Participant } from '../entities/participant.entity';
+import { JwtAuthGuard } from '../authentification/guards/jwt-auth.guards';
 
 @Controller('ticket')
 export class TicketController {
@@ -18,6 +18,7 @@ export class TicketController {
     return this.ticketService.findAll();
   }
 
+  @UseGuards(JwtAuthGuard)
   @Get('/participant')
   async getParticipantTickets(@Req() req) {
     const participantId = req.user.id;
@@ -30,6 +31,7 @@ export class TicketController {
     return this.ticketService.findOne(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/buy/:eventId')
   async buyTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
@@ -37,6 +39,7 @@ export class TicketController {
     return ticket;
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post('/reserve/:eventId')
   async reserveTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;

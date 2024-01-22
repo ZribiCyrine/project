@@ -8,13 +8,13 @@ export class AuthentificationController {
 
   constructor(private readonly authentificationService: AuthentificationService) {}
 
-  @Post('/register')
+  @Post('register')
   register(@Body() participantData: ParticipantSubscribeDto){
     return this.authentificationService.register(participantData)
   }
 
-  @Post('/login')
-  login(credentials: LoginCredentialsDto) {
+  @Post('login')
+  login(@Body() credentials: LoginCredentialsDto) {
     return this.authentificationService.login(credentials)
   }
 
