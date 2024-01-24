@@ -1,16 +1,15 @@
 import { Module } from '@nestjs/common';
 import { AdminService } from './admin.service';
 import { AdminController } from './admin.controller';
-import { Admin } from '../entities/admin.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { JwtService } from '@nestjs/jwt';
-import { ConfigService } from '@nestjs/config';
+import { Admin } from '../entities/admin.entity';
+import { Person } from '../entities/person.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Admin]),
+    TypeOrmModule.forFeature([Person])
   ],
   controllers: [AdminController],
-  providers: [AdminService, JwtService, ConfigService],
+  providers: [AdminService],
 })
 export class AdminModule {}

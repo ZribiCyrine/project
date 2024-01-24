@@ -6,9 +6,10 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from '../entities/event.entity';
 import { EventService } from '../event/event.service';
 import { Creator } from '../entities/creator.entity';
+import { Person } from '../entities/person.entity';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([Ticket, Event, Creator])],
+  imports: [TypeOrmModule.forFeature([Ticket, Event, Person])],
   controllers: [TicketController],
   providers: [TicketService, EventService],
 })

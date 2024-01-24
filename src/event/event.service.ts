@@ -5,33 +5,31 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
 import { EventStatus } from '../enum/eventStatus.enum';
-import { CreatorService } from '../creator/creator.service';
 import { Admin } from '../entities/admin.entity';
 import { Creator } from '../entities/creator.entity';
-import { Participant } from '../entities/participant.entity';
 import { Role } from '../enum/role.enum';
+import { Person } from '../entities/person.entity';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-    @InjectRepository(Creator)
-    private readonly creatorRepository: Repository<Creator>,
+    @InjectRepository(Person)
+    private readonly personRepository: Repository<Person>,
   ) { }
 
-  async create(createEventDto: CreateEventDto, user: Participant | Creator): Promise<Event> {
-    let creator: Creator;
-      creator = await this.creatorRepository.findOne({ where: { id: user.id } });
-      if (!creator) {
-        creator = this.creatorRepository.create({
-          ...user, 
-          role: Role.CREATOR 
-        });
-        await this.creatorRepository.save(creator);
-      }
+  async create(createEventDto: CreateEventDto, userId: number): Promise<Event> {
+    let user = await this.personRepository.findOne({ where: { id: userId } });
+    if (!user) {
+      throw new NotFoundException(`User with ID ${userId} not found`);
+    }
+    if (user.role !== Role.CREATOR) {
+      user.role = Role.CREATOR;
+      await this.personRepository.save(user);
+    }
     const event = this.eventRepository.create(createEventDto);
-    event.creator = creator;
+    event.creator = user as Creator;
     return await this.eventRepository.save(event);
   }
 
@@ -52,8 +50,10 @@ export class EventService {
   }
 
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
-    const creatorExists = await this.creatorRepository.findOne({where: {id: creatorId}});
-    if (!creatorExists) {
+    const creator = await this.personRepository.findOne({
+      where: { id: creatorId, role: Role.CREATOR }
+    });
+    if (!creator) {
       return [];
     }
     return await this.eventRepository.find({

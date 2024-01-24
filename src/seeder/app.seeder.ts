@@ -3,22 +3,21 @@ dotenv.config();
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from '../app.module';
-import { AdminService } from '../admin/admin.service';
-import { CreatorService } from '../creator/creator.service';
-import { ParticipantService } from '../participant/participant.service';
-import { EventService } from '../event/event.service';
-import { Admin } from '../entities/admin.entity';
-import { Creator } from '../entities/creator.entity';
-import { Participant } from '../entities/participant.entity';
-import { SellPoint } from '../entities/sellPoint.entity';
-import { Ticket } from '../entities/ticket.entity';
 import { Event } from '../entities/event.entity';
 import { Image } from '../entities/image.entity';
+import { Admin } from '../entities/admin.entity';
+import { Creator } from '../entities/creator.entity';
+import { Person } from '../entities/person.entity';
+import { SellPoint } from '../entities/sellPoint.entity';
 import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
 import { ImageService } from '../image/image.service';
 import { SellPointService } from '../sell-point/sell-point.service';
 import * as bcrypt from 'bcrypt';
+import { AdminService } from '../admin/admin.service';
+import { EventService } from '../event/event.service';
+import { PersonService } from '../person/person.service';
+
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -26,12 +25,10 @@ async function bootstrap() {
         const app = await NestFactory.createApplicationContext(AppModule);
         Logger.error(`Connected to the database successfully`);
         const adminService = app.get(AdminService);
-        const creatorService = app.get(CreatorService);
-        const participantService = app.get(ParticipantService);
+        const personService = app.get(PersonService);
         const eventService = app.get(EventService);
         const imageService = app.get(ImageService);
         const sellPointService = app.get(SellPointService);
-
 
         const admins = [];
         const admin1 = new Admin();
@@ -41,7 +38,7 @@ async function bootstrap() {
         admin1.phoneNumber = 52712485;
         admin1.email = "cyrinezribi23@gmail.com";
         admin1.salt = await bcrypt.genSalt();
-        admin1.password =  await bcrypt.hash("cyrine123", admin1.salt);
+        admin1.password = await bcrypt.hash("cyrine123", admin1.salt);
         admin1.role = Role.ADMIN;
         const newAdmin1 = await adminService.create(admin1);
         admins.push(newAdmin1);
@@ -53,39 +50,22 @@ async function bootstrap() {
         admin2.phoneNumber = 51181080;
         admin2.email = "salimbenomrane@gmail.com";
         admin2.salt = await bcrypt.genSalt();
-        admin2.password =  await bcrypt.hash("salim123", admin2.salt);
+        admin2.password = await bcrypt.hash("salim123", admin2.salt);
         admin2.role = Role.ADMIN;
         const newAdmin2 = await adminService.create(admin2);
         admins.push(newAdmin2);
 
-        const creators = [];
         for (let i = 0; i < 20; i++) {
-            const creator = new Creator();
-            creator.name = falso.randLastName();
-            creator.firstname = falso.randFirstName();
-            creator.cin = falso.randNumber({ min: 10000000, max: 99999999 });
-            creator.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
-            creator.email = falso.randEmail();
-            creator.password = falso.randPassword();
-            creator.salt = falso.randWord();
-            creator.role = Role.CREATOR;
-            const newCreator = await creatorService.create(creator);
-            creators.push(newCreator);
-        }
-
-        const participants = [];
-        for (let i = 0; i < 20; i++) {
-            const participant = new Participant();
-            participant.name = falso.randLastName();
-            participant.firstname = falso.randFirstName();
-            participant.cin = falso.randNumber({ min: 10000000, max: 99999999 });
-            participant.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
-            participant.email = falso.randEmail();
-            participant.password = falso.randPassword();
-            participant.salt = falso.randWord();
-            participant.role = Role.PARTICIPANT;
-            const newParticipant = await participantService.create(participant);
-            participants.push(newParticipant);
+            const person = new Person();
+            person.firstname = falso.randFirstName();
+            person.name = falso.randLastName();
+            person.cin = falso.randNumber({ min: 10000000, max: 99999999 });
+            person.phoneNumber = falso.randNumber({ min: 20000000, max: 99999999 });
+            person.email = falso.randEmail();
+            person.salt = await bcrypt.genSalt();
+            person.password = await bcrypt.hash('password123', person.salt);
+            person.role = i % 2 == 0 ? Role.CREATOR : Role.PARTICIPANT;
+            await personService.create(person);
         }
 
         const sellPoints = [];
@@ -99,7 +79,7 @@ async function bootstrap() {
         }
 
         const images = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 25; i++) {
             const image = new Image();
             const imageData = Buffer.from(falso.randUrl(), 'base64');
             image.data = imageData;
@@ -107,12 +87,15 @@ async function bootstrap() {
             images.push(newImage);
         }
 
+        const creators = await personService.findAllByRole(Role.CREATOR);
+        const creatorIds = creators.map(creator => creator.id);
+
         const events = [];
         const alcoholRules = ['Alcool autorisé', 'Alcool interdit'];
         const ageRules = ['+18', '12 ans et plus', 'Tout public'];
         const dressCode = ['Décontracté', 'Créatif', 'Vintage', 'Cocktail'];
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             const event = new Event();
             event.name = falso.randWord();
             event.type = falso.randMusicGenre();
@@ -126,16 +109,17 @@ async function bootstrap() {
             event.eventDate = falso.randSoonDate();
             event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
             event.image = images[i];
-            const creator = creators[Math.floor(Math.random() * creators.length)];
-            //event.admin = admins[Math.floor(Math.random() * admins.length)];
+
+            const creatorId = creatorIds[Math.floor(Math.random() * creatorIds.length)];
+
             try {
-                const newEvent = await eventService.create(event, creator);
-                events.push(newEvent);
+                const newEvent = await eventService.create(event, creatorId);
+            events.push(newEvent);
             } catch (error) {
                 Logger.error(`Error creating event: ${error.message}`);
             }
         }
-        
+
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);

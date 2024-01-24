@@ -21,30 +21,10 @@ export class ImageService {
     }
   }
 
-  async findAll(): Promise<Image[]> {
-    return await this.imageRepository.find();
-  }
-  
   async findByEventId(eventId: number): Promise<Image[]> {
     return await this.imageRepository.find({
       where: { event: { id: eventId } },
     });
   }
 
-  async findOne(id: number): Promise<Image> {
-    const image = await this.imageRepository.findOne({ where: { id: id } });
-    if (!image) {
-      throw new NotFoundException(`Image with ID ${id} not found`);
-    }
-    return image;
-  }
-
-  async update(id: number, updateImageDto: UpdateImageDto): Promise<Image> {
-    this.imageRepository.update(id, updateImageDto);
-    return await this.findOne(id);
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.imageRepository.delete(id);
-  }
 }
