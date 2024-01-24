@@ -6,7 +6,6 @@ import { AppModule } from '../app.module';
 import { Event } from '../entities/event.entity';
 import { Image } from '../entities/image.entity';
 import { Admin } from '../entities/admin.entity';
-import { Creator } from '../entities/creator.entity';
 import { Person } from '../entities/person.entity';
 import { SellPoint } from '../entities/sellPoint.entity';
 import { Role } from '../enum/role.enum';
@@ -17,7 +16,6 @@ import * as bcrypt from 'bcrypt';
 import { AdminService } from '../admin/admin.service';
 import { EventService } from '../event/event.service';
 import { PersonService } from '../person/person.service';
-
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -64,7 +62,12 @@ async function bootstrap() {
             person.email = falso.randEmail();
             person.salt = await bcrypt.genSalt();
             person.password = await bcrypt.hash('password123', person.salt);
-            person.role = i % 2 == 0 ? Role.CREATOR : Role.PARTICIPANT;
+            if (i % 2 == 0) {
+                person.role = Role.PARTICIPANT;
+            }
+            else {
+                person.role = Role.CREATOR;
+            }
             await personService.create(person);
         }
 
@@ -114,7 +117,7 @@ async function bootstrap() {
 
             try {
                 const newEvent = await eventService.create(event, creatorId);
-            events.push(newEvent);
+                events.push(newEvent);
             } catch (error) {
                 Logger.error(`Error creating event: ${error.message}`);
             }

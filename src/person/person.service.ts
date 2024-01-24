@@ -14,11 +14,12 @@ export class PersonService {
 
   async create(createPersonDto: CreatePersonDto): Promise<Person> {
     const participant = this.personRepository.create(createPersonDto);
+    participant.role= Role.PARTICIPANT;
     return await this.personRepository.save(participant);
   }
 
   async findAllByRole(role: Role): Promise<Person[]> {
     return this.personRepository.find({ where: { role } });
-}
+  }
 
 }

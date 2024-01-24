@@ -5,7 +5,6 @@ import { Ticket } from '../entities/ticket.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from '../entities/event.entity';
 import { EventService } from '../event/event.service';
-import { Creator } from '../entities/creator.entity';
 import { Person } from '../entities/person.entity';
 
 @Module({
