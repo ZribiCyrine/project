@@ -126,10 +126,10 @@ async function bootstrap() {
             event.eventDate = falso.randSoonDate();
             event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
             event.image = images[i];
-            event.creator = creators[Math.floor(Math.random() * creators.length)];
-            event.admin = admins[Math.floor(Math.random() * admins.length)];
+            const creator = creators[Math.floor(Math.random() * creators.length)];
+            //event.admin = admins[Math.floor(Math.random() * admins.length)];
             try {
-                const newEvent = await eventService.create(event);
+                const newEvent = await eventService.create(event, creator);
                 events.push(newEvent);
             } catch (error) {
                 Logger.error(`Error creating event: ${error.message}`);

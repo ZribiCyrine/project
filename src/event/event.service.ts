@@ -5,31 +5,34 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Event } from '../entities/event.entity';
 import { EventStatus } from '../enum/eventStatus.enum';
+import { CreatorService } from '../creator/creator.service';
+import { Admin } from '../entities/admin.entity';
+import { Creator } from '../entities/creator.entity';
+import { Participant } from '../entities/participant.entity';
+import { Role } from '../enum/role.enum';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-  ) {}
+    @InjectRepository(Creator)
+    private readonly creatorRepository: Repository<Creator>,
+  ) { }
 
-  async create(createEventDto: CreateEventDto): Promise<Event> {
+  async create(createEventDto: CreateEventDto, user: Participant | Creator): Promise<Event> {
+    let creator: Creator;
+      creator = await this.creatorRepository.findOne({ where: { id: user.id } });
+      if (!creator) {
+        creator = this.creatorRepository.create({
+          ...user, 
+          role: Role.CREATOR 
+        });
+        await this.creatorRepository.save(creator);
+      }
     const event = this.eventRepository.create(createEventDto);
+    event.creator = creator;
     return await this.eventRepository.save(event);
-  }
-
-  async findAll(): Promise<Event[]> {
-    return (await this.eventRepository.find()).sort((a, b) => {
-      if (a.status === EventStatus.PENDING) {
-        return -1;
-      }
-
-      if (b.status === EventStatus.PENDING) {
-        return 1;
-      }
-
-      return a.eventDate > b.eventDate ? 1 : -1;
-    });
   }
 
   async getRecentNonConfirmedEvents(): Promise<Event[]> {
@@ -49,6 +52,10 @@ export class EventService {
   }
 
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
+    const creatorExists = await this.creatorRepository.findOne({where: {id: creatorId}});
+    if (!creatorExists) {
+      return [];
+    }
     return await this.eventRepository.find({
       where: { creator: { id: creatorId } },
     });
@@ -71,15 +78,17 @@ export class EventService {
     await this.eventRepository.delete(id);
   }
 
-  async rejectEvent(id: number): Promise<void> {
+  async rejectEvent(id: number, admin: Admin): Promise<void> {
     const event = await this.findOne(id);
     event.status = EventStatus.REJECTED;
+    event.admin = admin;
     await this.eventRepository.save(event);
   }
 
-  async acceptEvent(id: number): Promise<void> {
+  async acceptEvent(id: number, admin: Admin): Promise<void> {
     const event = await this.findOne(id);
     event.status = EventStatus.CONFIRMED;
+    event.admin = admin;
     await this.eventRepository.save(event);
   }
 }

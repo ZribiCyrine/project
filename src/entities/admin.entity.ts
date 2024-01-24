@@ -5,9 +5,7 @@ import { Role } from "../enum/role.enum";
 
 @Entity('admin')
 export class Admin extends Person {
-    @OneToMany(() => Event, event => event.admin, {
-        cascade: true
-    })
+    @OneToMany(() => Event, event => event.admin)
     events: Event[]
 
     constructor(){

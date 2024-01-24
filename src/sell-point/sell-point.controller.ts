@@ -17,11 +17,6 @@ export class SellPointController {
     return this.sellPointService.findAll();
   }
 
-  @Get('/event/:eventId')
-  async findSellPointsByEvent(@Param('eventId') eventId: number){
-    return this.sellPointService.findSellPointsByEvent(eventId);
-  }
-
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.sellPointService.findOne(+id);

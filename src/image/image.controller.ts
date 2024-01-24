@@ -34,12 +34,7 @@ export class ImageController {
 
   @Get('event/:eventId')
   async getImagesByEvent(@Param('eventId') eventId: number) {
-    try {
-      const images = await this.imageService.findByEventId(eventId);
-      return { success: true, images };
-    } catch (error) {
-      return { success: false, error: error.message };
-    }
+      return this.imageService.findByEventId(eventId);
   }
 
   @Get(':id')

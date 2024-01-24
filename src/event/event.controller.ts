@@ -2,25 +2,31 @@ import { Controller, Get, Post, Body, Patch, Param, Delete, Req, UseGuards } fro
 import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
-import { JwtAuthGuard } from '../authentification/guards/jwt-auth.guards';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guards';
 
 @Controller('event')
 export class EventController {
-  constructor(private readonly eventService: EventService) {}
+  constructor(private readonly eventService: EventService) { }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('accept/:id')
-  acceptEvent(@Param('id') id: number){
-    return this.eventService.acceptEvent(+id);
+  acceptEvent(@Param('id') id: number, @Req() req) {
+    const admin = req.user;
+    return this.eventService.acceptEvent(+id, admin);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Patch('reject/:id')
-  rejectEvent(@Param('id') id: number){
-    return this.eventService.rejectEvent(+id);
+  rejectEvent(@Param('id') id: number, @Req() req) {
+    const admin = req.user;
+    return this.eventService.rejectEvent(+id, admin);
   }
 
+  @UseGuards(JwtAuthGuard)
   @Post()
-  create(@Body() createEventDto: CreateEventDto) {
-    return this.eventService.create(createEventDto);
+  create(@Body() createEventDto: CreateEventDto, @Req() req) {
+    const user= req.user;
+    return this.eventService.create(createEventDto, user);
   }
 
   @Get('/recent')
@@ -31,19 +37,14 @@ export class EventController {
   @UseGuards(JwtAuthGuard)
   @Get('/my-events')
   async getMyEvents(@Req() req) {
-    const creatorId = req.user.id; 
+    const creatorId = req.user.id;
     const events = await this.eventService.findEventsByCreator(creatorId);
     return events;
   }
 
   @Get('/confirmed')
-  async getConfirmedEvents(){
+  async getConfirmedEvents() {
     return this.eventService.getConfirmedEvents();
-  }
-
-  @Get()
-  findAll() {
-    return this.eventService.findAll();
   }
 
   @Get(':id')

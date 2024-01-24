@@ -1,21 +1,21 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { AuthentificationService } from './authentification.service';
 import { ParticipantSubscribeDto } from './dto/participant-subscribe.dto';
 import { LoginCredentialsDto } from './dto/login-credentials.dto';
+import { AuthService } from './auth.service';
 
-@Controller('authentification')
-export class AuthentificationController {
+@Controller('auth')
+export class AuthController {
 
-  constructor(private readonly authentificationService: AuthentificationService) {}
+  constructor(private readonly authService: AuthService) {}
 
   @Post('register')
   register(@Body() participantData: ParticipantSubscribeDto){
-    return this.authentificationService.register(participantData)
+    return this.authService.register(participantData)
   }
 
   @Post('login')
   login(@Body() credentials: LoginCredentialsDto) {
-    return this.authentificationService.login(credentials)
+    return this.authService.login(credentials)
   }
 
 }

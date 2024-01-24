@@ -12,20 +12,6 @@ export class AdminController {
     return this.adminService.create(createAdminDto);
   }
 
-  @Get(':email')
-  async getParticipantByEmail(@Param('email') email: string) {
-    try {
-      const participant = await this.adminService.getAdminByEmail(email);
-      if (participant) {
-        return { success: true, participant };
-      } else {
-        return { success: false, message: 'Participant not found' };
-      }
-    } catch (error) {
-      return { success: false, message: 'Error retrieving participant' };
-    }
-  }
-
   @Post('/login')
   login(@Body() credentials: AdminLoginCredentialsDto) {
     return this.adminService.login(credentials)

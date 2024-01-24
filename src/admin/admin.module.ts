@@ -6,8 +6,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 
-
-console.log("process.env.SECRET", process.env.SECRET);
 @Module({
   imports: [
     TypeOrmModule.forFeature([Admin]),

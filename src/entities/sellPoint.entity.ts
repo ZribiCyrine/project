@@ -16,8 +16,6 @@ export class SellPoint{
     @Column({ type: 'bigint' })
     phoneNumber: number;
 
-    @OneToMany(() => Event, event => event.sellPoint, {
-        cascade: true,
-    })
+    @OneToMany(() => Event, event => event.sellPoint)
     events: Event[];
 }

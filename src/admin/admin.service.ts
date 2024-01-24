@@ -25,16 +25,12 @@ export class AdminService {
     return await this.adminRepository.save(admin);
   }
 
-  async getAdminByEmail(email: string): Promise<Admin> {
-    return await this.adminRepository.findOne({ where: { email: email } });
-  }
-
   async login(credentials: AdminLoginCredentialsDto) {
     if (!credentials || !credentials.email || !credentials.password) {
       throw new BadRequestException('Invalid credentials provided.');
     }
     const { email, password } = credentials;
-    const admin = await this.getAdminByEmail(email);
+    const admin = await this.adminRepository.findOne({ where: { email: email } });
     if (!admin) {
       throw new NotFoundException('Email or password incorrect.');
     }

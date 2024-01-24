@@ -64,9 +64,7 @@ export class Event extends BaseDate {
     })
     admin: Admin
 
-    @OneToMany(() => Ticket, ticket => ticket.event, {
-        cascade: true
-    })
+    @OneToMany(() => Ticket, ticket => ticket.event)
     tickets: Ticket[];
 
     @Column({ type: 'varchar', default: EventStatus.PENDING })
