@@ -27,6 +27,6 @@ export class info extends BaseDate{
     @Column({ type: 'varchar' })
     salt: string;
 
-    @Column({ type: 'varchar', default: Role.PARTICIPANT })
+    @Column({ type: 'varchar'})
     role: Role;
 }
