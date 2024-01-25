@@ -12,4 +12,4 @@ import { Participant } from '../entities/participant.ts';
   controllers: [TicketController],
   providers: [TicketService, EventService],
 })
-export class TicketModule {}
+export class TicketModule { }

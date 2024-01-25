@@ -5,7 +5,7 @@ import { Participant } from "./participant.ts";
 
 @ChildEntity(Role.CREATOR)
 export class Creator extends Participant {
-    
+
     @OneToMany(type => Event, event => event.creator)
     events: Event[];
 }

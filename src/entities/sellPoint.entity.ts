@@ -2,15 +2,15 @@ import { Column, Entity, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "t
 import { Event } from "./event.entity";
 
 @Entity('sellpoint')
-export class SellPoint{
-    
+export class SellPoint {
+
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({ type: 'varchar'})
+    @Column({ type: 'varchar' })
     name: string;
 
-    @Column({ type: 'varchar'})
+    @Column({ type: 'varchar' })
     address: string;
 
     @Column({ type: 'bigint' })

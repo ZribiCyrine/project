@@ -6,7 +6,7 @@ import { Participant } from "./participant.ts";
 
 @Entity('ticket')
 export class Ticket extends BaseDate {
-    
+
     @PrimaryGeneratedColumn()
     id: number;
 

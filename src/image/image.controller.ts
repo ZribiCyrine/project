@@ -6,7 +6,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 
 @Controller('image')
 export class ImageController {
-  constructor(private readonly imageService: ImageService) {}
+  constructor(private readonly imageService: ImageService) { }
 
   @Post('upload')
   @UseInterceptors(FileInterceptor('file'))
@@ -28,7 +28,7 @@ export class ImageController {
 
   @Get('event/:eventId')
   async getImagesByEvent(@Param('eventId') eventId: number) {
-      return this.imageService.findByEventId(eventId);
+    return this.imageService.findByEventId(eventId);
   }
 
 }

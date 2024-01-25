@@ -9,4 +9,4 @@ import { SellPoint } from '../entities/sellPoint.entity';
   controllers: [SellPointController],
   providers: [SellPointService],
 })
-export class SellPointModule {}
+export class SellPointModule { }

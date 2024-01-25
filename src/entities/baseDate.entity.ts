@@ -1,13 +1,13 @@
 import { CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-export class BaseDate{
+export class BaseDate {
 
     @CreateDateColumn()
     createdAt: Date;
 
     @UpdateDateColumn()
     updatedAt: Date;
-    
+
     @DeleteDateColumn()
     deletedAt: Date;
 }

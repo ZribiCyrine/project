@@ -25,8 +25,8 @@ export class EventService {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
     if (user.role !== Role.CREATOR) {
-      user.role = Role.CREATOR;
-      await this.participantRepository.save(user);
+      await this.participantRepository.update(userId, { role: Role.CREATOR });
+      user = await this.participantRepository.findOne({ where: { id: userId } });
     }
     const event = this.eventRepository.create(createEventDto);
     event.creator = user as Creator;

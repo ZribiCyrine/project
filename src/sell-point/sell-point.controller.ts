@@ -5,7 +5,7 @@ import { UpdateSellPointDto } from './dto/update-sell-point.dto';
 
 @Controller('sell-point')
 export class SellPointController {
-  constructor(private readonly sellPointService: SellPointService) {}
+  constructor(private readonly sellPointService: SellPointService) { }
 
   @Post()
   create(@Body() createSellPointDto: CreateSellPointDto) {

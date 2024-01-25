@@ -15,8 +15,8 @@ export class ParticipantService {
   async create(infoDto: InfoDto): Promise<Participant> {
     const participant = this.participantRepository.create({
       ...infoDto,
-      role: Role.PARTICIPANT 
-  });
+      role: Role.PARTICIPANT
+    });
     return await this.participantRepository.save(participant);
   }
 

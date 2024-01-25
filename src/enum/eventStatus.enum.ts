@@ -1,5 +1,5 @@
-export enum EventStatus{
-    CONFIRMED= 'CONFIRMED',
-    REJECTED= 'REJECTED',
-    PENDING= 'PENDING'
+export enum EventStatus {
+    CONFIRMED = 'CONFIRMED',
+    REJECTED = 'REJECTED',
+    PENDING = 'PENDING'
 }

@@ -2,8 +2,8 @@ import { Column, PrimaryGeneratedColumn } from "typeorm";
 import { BaseDate } from "./baseDate.entity";
 import { Role } from "../enum/role.enum";
 
-export class info extends BaseDate{
-  
+export class info extends BaseDate {
+
     @Column({ type: 'varchar' })
     name: string;
 

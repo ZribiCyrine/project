@@ -9,4 +9,4 @@ import { Image } from '../entities/image.entity';
   controllers: [ImageController],
   providers: [ImageService],
 })
-export class ImageModule {}
+export class ImageModule { }

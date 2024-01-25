@@ -11,7 +11,7 @@ export class SellPointService {
   constructor(
     @InjectRepository(SellPoint)
     private readonly sellPointRepository: Repository<SellPoint>,
-  ) {}
+  ) { }
 
   async create(createSellPointDto: CreateSellPointDto): Promise<SellPoint> {
     const sellPoint = this.sellPointRepository.create(createSellPointDto);

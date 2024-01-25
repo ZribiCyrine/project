@@ -10,7 +10,7 @@ export class ImageService {
   constructor(
     @InjectRepository(Image)
     private readonly imageRepository: Repository<Image>,
-  ) {}
+  ) { }
 
   async create(createImageDto: CreateImageDto): Promise<Image> {
     try {

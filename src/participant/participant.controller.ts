@@ -5,7 +5,7 @@ import { Role } from '../enum/role.enum';
 
 @Controller('participant')
 export class ParticipantController {
-  constructor(private readonly participantService: ParticipantService) {}
+  constructor(private readonly participantService: ParticipantService) { }
 
   @Post()
   create(@Body() infoDto: InfoDto) {
@@ -13,7 +13,7 @@ export class ParticipantController {
   }
 
   @Get(':role')
-  findAllByRole(@Param('role') role: Role){
+  findAllByRole(@Param('role') role: Role) {
     return this.participantService.findAllByRole(role);
   }
 }
