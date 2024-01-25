@@ -2,7 +2,7 @@ import { IsEmail, IsEnum, IsNotEmpty, IsNumber, IsString, isEnum, isString } fro
 import { Unique } from "typeorm";
 
 @Unique(['email'])
-export class CreatePersonDto {
+export class InfoDto {
     @IsNotEmpty()
     @IsString()
     name: string;

@@ -8,25 +8,25 @@ import { EventStatus } from '../enum/eventStatus.enum';
 import { Admin } from '../entities/admin.entity';
 import { Creator } from '../entities/creator.entity';
 import { Role } from '../enum/role.enum';
-import { Person } from '../entities/person.entity';
+import { Participant } from '../entities/participant.ts';
 
 @Injectable()
 export class EventService {
   constructor(
     @InjectRepository(Event)
     private readonly eventRepository: Repository<Event>,
-    @InjectRepository(Person)
-    private readonly personRepository: Repository<Person>,
+    @InjectRepository(Participant)
+    private readonly participantRepository: Repository<Participant>,
   ) { }
 
   async create(createEventDto: CreateEventDto, userId: number): Promise<Event> {
-    let user = await this.personRepository.findOne({ where: { id: userId } });
+    let user = await this.participantRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
     if (user.role !== Role.CREATOR) {
       user.role = Role.CREATOR;
-      await this.personRepository.save(user);
+      await this.participantRepository.save(user);
     }
     const event = this.eventRepository.create(createEventDto);
     event.creator = user as Creator;
@@ -50,7 +50,7 @@ export class EventService {
   }
 
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
-    const creator = await this.personRepository.findOne({
+    const creator = await this.participantRepository.findOne({
       where: { id: creatorId, role: Role.CREATOR }
     });
     if (!creator) {

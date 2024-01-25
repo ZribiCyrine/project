@@ -6,8 +6,8 @@ import { Repository } from 'typeorm';
 import { Ticket } from '../entities/ticket.entity';
 import { TicketStatus } from '../enum/ticketStatus.enum';
 import { EventService } from '../event/event.service';
-import { Person } from '../entities/person.entity';
 import { Role } from '../enum/role.enum';
+import { Participant } from '../entities/participant.ts';
 
 @Injectable()
 export class TicketService {
@@ -33,7 +33,7 @@ export class TicketService {
     });
   }
 
-  async buyTicket(purchaser: Person, eventId: number): Promise<Ticket> {
+  async buyTicket(purchaser: Participant, eventId: number): Promise<Ticket> {
     if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
       throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
     }
@@ -52,7 +52,7 @@ export class TicketService {
     return ticket;
   }
 
-  async reserveTicket(purchaser: Person, eventId: number): Promise<Ticket> {
+  async reserveTicket(purchaser: Participant, eventId: number): Promise<Ticket> {
     if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
       throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
     }

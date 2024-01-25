@@ -1,18 +1,22 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
-import { Person } from '../entities/person.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreatePersonDto } from '../person/dto/create-person.dto';
+import { Admin } from '../entities/admin.entity';
+import { InfoDto } from '../dto/info.dto';
+import { Role } from '../enum/role.enum';
 
 @Injectable()
 export class AdminService {
   constructor(
-    @InjectRepository(Person)
-    private readonly personRepository: Repository<Person>
+    @InjectRepository(Admin)
+    private readonly adminRepository: Repository<Admin>
   ) { }
 
-  async create(createAdminDto: CreatePersonDto): Promise<Person> {
-    const admin = this.personRepository.create(createAdminDto);
-    return await this.personRepository.save(admin);
+  async create(infoDto: InfoDto): Promise<Admin> {
+    const person = this.adminRepository.create({
+      ...infoDto,
+      role: Role.ADMIN 
+  });
+    return await this.adminRepository.save(person);
   }
 }

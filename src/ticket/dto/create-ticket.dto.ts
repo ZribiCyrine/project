@@ -1,7 +1,7 @@
 import { IsNotEmpty, IsString } from "class-validator";
 import { TicketStatus } from "../../enum/ticketStatus.enum";
 import { Event } from "../../entities/event.entity";
-import { Person } from "../../entities/person.entity";
+import { Participant } from "../../entities/participant.ts";
 
 export class CreateTicketDto {
     @IsNotEmpty()
@@ -9,7 +9,7 @@ export class CreateTicketDto {
     status: TicketStatus
 
     @IsNotEmpty()
-    purchaser: Person
+    purchaser: Participant
 
     @IsNotEmpty()
     event: Event

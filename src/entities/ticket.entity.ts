@@ -2,20 +2,21 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { BaseDate } from "./baseDate.entity";
 import { TicketStatus } from "../enum/ticketStatus.enum";
 import { Event } from "./event.entity";
-import { Person } from "./person.entity";
+import { Participant } from "./participant.ts";
 
 @Entity('ticket')
 export class Ticket extends BaseDate {
+    
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({ type: 'varchar' })
     status: TicketStatus;
 
-    @ManyToOne(() => Person, purchaser => purchaser.tickets, {
+    @ManyToOne(() => Participant, purchaser => purchaser.tickets, {
         eager: true
     })
-    purchaser: Person;
+    purchaser: Participant;
 
     @ManyToOne(() => Event, event => event.tickets, {
         eager: true

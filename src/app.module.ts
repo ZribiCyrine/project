@@ -12,10 +12,10 @@ import { Event } from './entities/event.entity';
 import { SellPoint } from './entities/sellPoint.entity';
 import { Ticket } from './entities/ticket.entity';
 import { Image } from './entities/image.entity';
-import { Person } from './entities/person.entity';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
-import { PersonModule } from './person/person.module';
+import { Participant } from './entities/participant.ts';
+import { ParticipantModule } from './participant/participant.module';
 
 @Module({
   imports: [
@@ -26,7 +26,7 @@ import { PersonModule } from './person/person.module';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [Person, Admin, Creator, Event, SellPoint, Image, Ticket],
+      entities: [Participant, Admin, Creator, Event, SellPoint, Image, Ticket],
       synchronize: true,
       logging: true,
       options: {
@@ -40,8 +40,8 @@ import { PersonModule } from './person/person.module';
     SellPointModule,
     ImageModule,
     AdminModule,
-    PersonModule,
-    AuthModule
+    AuthModule,
+    ParticipantModule
   ],
   controllers: [AppController],
   providers: [AppService],

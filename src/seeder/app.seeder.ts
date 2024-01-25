@@ -6,7 +6,6 @@ import { AppModule } from '../app.module';
 import { Event } from '../entities/event.entity';
 import { Image } from '../entities/image.entity';
 import { Admin } from '../entities/admin.entity';
-import { Person } from '../entities/person.entity';
 import { SellPoint } from '../entities/sellPoint.entity';
 import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
@@ -15,7 +14,7 @@ import { SellPointService } from '../sell-point/sell-point.service';
 import * as bcrypt from 'bcrypt';
 import { AdminService } from '../admin/admin.service';
 import { EventService } from '../event/event.service';
-import { PersonService } from '../person/person.service';
+import { ParticipantService } from '../participant/participant.service';
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -23,12 +22,11 @@ async function bootstrap() {
         const app = await NestFactory.createApplicationContext(AppModule);
         Logger.error(`Connected to the database successfully`);
         const adminService = app.get(AdminService);
-        const personService = app.get(PersonService);
+        const participantService = app.get(ParticipantService);
         const eventService = app.get(EventService);
         const imageService = app.get(ImageService);
         const sellPointService = app.get(SellPointService);
 
-        const admins = [];
         const admin1 = new Admin();
         admin1.firstname = "cyrine";
         admin1.name = "zribi";
@@ -37,9 +35,8 @@ async function bootstrap() {
         admin1.email = "cyrinezribi23@gmail.com";
         admin1.salt = await bcrypt.genSalt();
         admin1.password = await bcrypt.hash("cyrine123", admin1.salt);
-        admin1.role = Role.ADMIN;
-        const newAdmin1 = await adminService.create(admin1);
-        admins.push(newAdmin1);
+        //admin1.role = Role.ADMIN;
+        await adminService.create(admin1);
 
         const admin2 = new Admin();
         admin2.firstname = "salim";
@@ -49,11 +46,10 @@ async function bootstrap() {
         admin2.email = "salimbenomrane@gmail.com";
         admin2.salt = await bcrypt.genSalt();
         admin2.password = await bcrypt.hash("salim123", admin2.salt);
-        admin2.role = Role.ADMIN;
-        const newAdmin2 = await adminService.create(admin2);
-        admins.push(newAdmin2);
+        //admin2.role = Role.ADMIN;
+        await adminService.create(admin2);
 
-        for (let i = 0; i < 20; i++) {
+        /*for (let i = 0; i < 15; i++) {
             const person = new Person();
             person.firstname = falso.randFirstName();
             person.name = falso.randLastName();
@@ -62,14 +58,14 @@ async function bootstrap() {
             person.email = falso.randEmail();
             person.salt = await bcrypt.genSalt();
             person.password = await bcrypt.hash('password123', person.salt);
-            if (i % 2 == 0) {
+            /*if (i % 2 == 0) {
                 person.role = Role.PARTICIPANT;
             }
             else {
                 person.role = Role.CREATOR;
             }
             await personService.create(person);
-        }
+        }*/
 
         const sellPoints = [];
         for (let i = 0; i < 20; i++) {
@@ -90,7 +86,7 @@ async function bootstrap() {
             images.push(newImage);
         }
 
-        const creators = await personService.findAllByRole(Role.CREATOR);
+     /*   const creators = await personService.findAllByRole(Role.CREATOR);
         const creatorIds = creators.map(creator => creator.id);
 
         const events = [];
@@ -122,7 +118,7 @@ async function bootstrap() {
                 Logger.error(`Error creating event: ${error.message}`);
             }
         }
-
+*/
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);
