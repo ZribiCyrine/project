@@ -27,5 +27,4 @@ export class info extends BaseDate {
 
     @Column({ type: 'varchar' })
     role: Role
-
 }

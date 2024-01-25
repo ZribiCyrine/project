@@ -11,5 +11,4 @@ export class Participant extends info {
 
     @OneToMany(() => Ticket, ticket => ticket.purchaser)
     tickets: Ticket[];
-
 }

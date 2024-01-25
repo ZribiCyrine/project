@@ -8,13 +8,15 @@ import { TicketStatus } from '../enum/ticketStatus.enum';
 import { EventService } from '../event/event.service';
 import { Role } from '../enum/role.enum';
 import { Participant } from '../entities/participant.entity';
+import { Event } from '../entities/event.entity';
 
 @Injectable()
 export class TicketService {
   constructor(
     @InjectRepository(Ticket)
     private readonly ticketRepository: Repository<Ticket>,
-    private readonly eventService: EventService,
+    @InjectRepository(Event)
+    private readonly eventRepository: Repository<Event>
   ) { }
 
   async create(createTicketDto: CreateTicketDto): Promise<Ticket> {
@@ -37,7 +39,7 @@ export class TicketService {
     if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
       throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
     }
-    const event = await this.eventService.findOne(eventId);
+    const event = await this.eventRepository.findOne(({ where: { id: eventId } }));
     if (event.capacity <= 0) {
       throw new NotFoundException('Event is sold out.');
     }
@@ -48,7 +50,7 @@ export class TicketService {
       event: event,
     };
     const ticket = this.create(createTicketDto);
-    await this.eventService.update(eventId, { capacity: event.capacity });
+    await this.eventRepository.update(eventId, { capacity: event.capacity });
     return ticket;
   }
 
@@ -56,7 +58,7 @@ export class TicketService {
     if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
       throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
     }
-    const event = await this.eventService.findOne(eventId);
+    const event = await this.eventRepository.findOne({ where: { id: eventId } });
     if (event.capacity <= 0) {
       throw new NotFoundException('Event is sold out.');
     }
@@ -67,24 +69,8 @@ export class TicketService {
       event: event,
     };
     const ticket = this.create(createTicketDto);
-    await this.eventService.update(eventId, { capacity: event.capacity });
+    await this.eventRepository.update(eventId, { capacity: event.capacity });
     return ticket;
   }
 
-  async findOne(id: number): Promise<Ticket> {
-    const ticket = await this.ticketRepository.findOne({ where: { id: id } })
-    if (!ticket) {
-      throw new NotFoundException(`Ticket with ID ${id} not found`);
-    }
-    return ticket;
-  }
-
-  async update(id: number, updateTicketDto: UpdateTicketDto): Promise<Ticket> {
-    this.ticketRepository.update(id, updateTicketDto);
-    return await this.findOne(id);
-  }
-
-  async remove(id: number): Promise<void> {
-    await this.ticketRepository.delete(id);
-  }
 }

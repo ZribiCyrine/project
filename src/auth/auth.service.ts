@@ -49,37 +49,6 @@ export class AuthService {
     return newParticipant;
   }
 
-  async loginUser(credentials: LoginCredentialsDto) {
-    if (!credentials || !credentials.email || !credentials.password) {
-      throw new BadRequestException('Invalid credentials provided.');
-    }
-    const { email, password } = credentials;
-    const user = await this.participantRepository.findOne({ where: { email: email } });
-    if (!user) {
-      throw new NotFoundException('Email or password incorrect.');
-    }
-    const hashedPassword = await bcrypt.hash(password, user.salt);
-    console.log('match : ', user.password === hashedPassword)
-    if (user.password === hashedPassword) {
-      const payload = {
-        name: user.name,
-        firstname: user.firstname,
-        email: user.email,
-        role: user.role
-      };
-      console.log(process.env.JWT_SECRET);
-      const jwt = this.jwtService.sign(payload, {
-        secret: this.jwtSecret,
-        expiresIn: '1d',
-      });
-      return {
-        "access_token": jwt,
-      };
-    } else {
-      throw new NotFoundException('Email or password incorrect.');
-    }
-  }
-
   async login(credentials: LoginCredentialsDto, userRepository: Repository<Participant | Admin>) {
     if (!credentials || !credentials.email || !credentials.password) {
       throw new BadRequestException('Invalid credentials provided.');

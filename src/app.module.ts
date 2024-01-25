@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule, RequestMethod } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -16,6 +16,7 @@ import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
 import { Participant } from './entities/participant.entity';
 import { ParticipantModule } from './participant/participant.module';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -44,6 +45,8 @@ import { ParticipantModule } from './participant/participant.module';
     ParticipantModule
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, JwtService],
 })
-export class AppModule { }
+
+export class AppModule {
+}

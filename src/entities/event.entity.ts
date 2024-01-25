@@ -9,6 +9,7 @@ import { EventStatus } from "../enum/eventStatus.enum";
 
 @Entity('event')
 export class Event extends BaseDate {
+    
     @PrimaryGeneratedColumn()
     id: number;
 

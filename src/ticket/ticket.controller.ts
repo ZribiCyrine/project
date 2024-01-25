@@ -26,11 +26,6 @@ export class TicketController {
     return tickets;
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.ticketService.findOne(+id);
-  }
-
   @UseGuards(JwtAuthGuard)
   @Post('/buy/:eventId')
   async buyTicket(@Req() req, @Param('eventId') eventId: number) {
@@ -47,13 +42,4 @@ export class TicketController {
     return ticket;
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTicketDto: UpdateTicketDto) {
-    return this.ticketService.update(+id, updateTicketDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.ticketService.remove(+id);
-  }
 }

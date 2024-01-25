@@ -25,23 +25,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         })
     }
 
-    /*async validate(payload: PayloadInterface) {
-        const participant = await this.participantRepository.findOne({ where: { email: payload.email } });
-        if (participant) {
-            return {
-                ...participant,
-                role: payload.role,
-            };
-        }
-        else {
-            throw new UnauthorizedException();
-        }
-    }*/
     async validate(payload: PayloadInterface) {
         let user;
         if (payload.role === Role.PARTICIPANT || payload.role === Role.CREATOR) {
             user = await this.participantRepository.findOne({ where: { email: payload.email } });
-        } else if (payload.role === Role.ADMIN) {
+        } else {
             user = await this.adminRepository.findOne({ where: { email: payload.email } });
         }
 
@@ -50,8 +38,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
 
         return {
-            ...user,
-            role: payload.role,
+            id: user.id,
+            name: user.name,
+            firstname: user.firstname,
+            email: user.email,
+            role: user.role
         };
     }
 }

@@ -10,5 +10,4 @@ export class Admin extends info {
 
     @OneToMany(() => Event, event => event.admin)
     events: Event[]
-
 }

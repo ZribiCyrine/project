@@ -1,20 +1,19 @@
 import * as dotenv from 'dotenv';
 dotenv.config();
+import { Admin } from '../entities/admin.entity';
 import { Logger } from '@nestjs/common';
 import { NestFactory } from '@nestjs/core';
+import { AdminService } from '../admin/admin.service';
 import { AppModule } from '../app.module';
-import { Event } from '../entities/event.entity';
+import * as bcrypt from 'bcrypt';
 import { Image } from '../entities/image.entity';
-import { Admin } from '../entities/admin.entity';
 import { SellPoint } from '../entities/sellPoint.entity';
-import { Role } from '../enum/role.enum';
 import * as falso from '@ngneat/falso';
 import { ImageService } from '../image/image.service';
 import { SellPointService } from '../sell-point/sell-point.service';
-import * as bcrypt from 'bcrypt';
-import { AdminService } from '../admin/admin.service';
 import { EventService } from '../event/event.service';
 import { ParticipantService } from '../participant/participant.service';
+import { Event } from '../entities/event.entity';
 
 async function bootstrap() {
     Logger.log('Attempting to connect to the database...');
@@ -35,7 +34,6 @@ async function bootstrap() {
         admin1.email = "cyrinezribi23@gmail.com";
         admin1.salt = await bcrypt.genSalt();
         admin1.password = await bcrypt.hash("cyrine123", admin1.salt);
-        //admin1.role = Role.ADMIN;
         await adminService.create(admin1);
 
         const admin2 = new Admin();
@@ -46,29 +44,10 @@ async function bootstrap() {
         admin2.email = "salimbenomrane@gmail.com";
         admin2.salt = await bcrypt.genSalt();
         admin2.password = await bcrypt.hash("salim123", admin2.salt);
-        //admin2.role = Role.ADMIN;
         await adminService.create(admin2);
 
-        /*for (let i = 0; i < 15; i++) {
-            const person = new Person();
-            person.firstname = falso.randFirstName();
-            person.name = falso.randLastName();
-            person.cin = falso.randNumber({ min: 10000000, max: 99999999 });
-            person.phoneNumber = falso.randNumber({ min: 20000000, max: 99999999 });
-            person.email = falso.randEmail();
-            person.salt = await bcrypt.genSalt();
-            person.password = await bcrypt.hash('password123', person.salt);
-            /*if (i % 2 == 0) {
-                person.role = Role.PARTICIPANT;
-            }
-            else {
-                person.role = Role.CREATOR;
-            }
-            await personService.create(person);
-        }*/
-
         const sellPoints = [];
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 10; i++) {
             const sellPoint = new SellPoint();
             sellPoint.name = falso.randCompanyName();
             sellPoint.address = falso.randFullAddress();
@@ -78,7 +57,7 @@ async function bootstrap() {
         }
 
         const images = [];
-        for (let i = 0; i < 25; i++) {
+        for (let i = 0; i < 13; i++) {
             const image = new Image();
             const imageData = Buffer.from(falso.randUrl(), 'base64');
             image.data = imageData;
@@ -86,7 +65,7 @@ async function bootstrap() {
             images.push(newImage);
         }
 
-        /*   const creators = await personService.findAllByRole(Role.CREATOR);
+           const creators = await participantService.findAll();
            const creatorIds = creators.map(creator => creator.id);
    
            const events = [];
@@ -108,7 +87,6 @@ async function bootstrap() {
                event.eventDate = falso.randSoonDate();
                event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
                event.image = images[i];
-   
                const creatorId = creatorIds[Math.floor(Math.random() * creatorIds.length)];
    
                try {
@@ -118,7 +96,7 @@ async function bootstrap() {
                    Logger.error(`Error creating event: ${error.message}`);
                }
            }
-   */
+   
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);

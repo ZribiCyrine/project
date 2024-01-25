@@ -61,6 +61,14 @@ export class EventService {
     });
   }
 
+  async rejectEvent(id: number, admin: Admin): Promise<void> {
+    await this.eventRepository.update(id, { status: EventStatus.REJECTED, admin: admin })
+  }
+
+  async acceptEvent(id: number, admin: Admin): Promise<void> {
+    await this.eventRepository.update(id, { status: EventStatus.CONFIRMED, admin: admin })
+  }
+
   async findOne(id: number): Promise<Event> {
     const event = await this.eventRepository.findOne({ where: { id: id } });
     if (!event) {
@@ -77,18 +85,5 @@ export class EventService {
   async remove(id: number): Promise<void> {
     await this.eventRepository.delete(id);
   }
-
-  async rejectEvent(id: number, admin: Admin): Promise<void> {
-    const event = await this.findOne(id);
-    event.status = EventStatus.REJECTED;
-    event.admin = admin;
-    await this.eventRepository.save(event);
-  }
-
-  async acceptEvent(id: number, admin: Admin): Promise<void> {
-    const event = await this.findOne(id);
-    event.status = EventStatus.CONFIRMED;
-    event.admin = admin;
-    await this.eventRepository.save(event);
-  }
+  
 }

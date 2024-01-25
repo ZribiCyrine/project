@@ -11,15 +11,15 @@ export class EventController {
   @UseGuards(JwtAuthGuard)
   @Patch('accept/:id')
   acceptEvent(@Param('id') id: number, @Req() req) {
-    const admin = req.user;
-    return this.eventService.acceptEvent(+id, admin);
+    const user = req.user;
+    return this.eventService.acceptEvent(+id, user);
   }
 
   @UseGuards(JwtAuthGuard)
   @Patch('reject/:id')
   rejectEvent(@Param('id') id: number, @Req() req) {
-    const admin = req.user;
-    return this.eventService.rejectEvent(+id, admin);
+    const user = req.user;
+    return this.eventService.rejectEvent(+id, user);
   }
 
   @UseGuards(JwtAuthGuard)
