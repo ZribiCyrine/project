@@ -5,7 +5,7 @@ import { Ticket } from '../entities/ticket.entity';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Event } from '../entities/event.entity';
 import { EventService } from '../event/event.service';
-import { Participant } from '../entities/participant.ts';
+import { Participant } from '../entities/participant.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Ticket, Event, Participant])],

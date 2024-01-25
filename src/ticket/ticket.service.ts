@@ -7,7 +7,7 @@ import { Ticket } from '../entities/ticket.entity';
 import { TicketStatus } from '../enum/ticketStatus.enum';
 import { EventService } from '../event/event.service';
 import { Role } from '../enum/role.enum';
-import { Participant } from '../entities/participant.ts';
+import { Participant } from '../entities/participant.entity';
 
 @Injectable()
 export class TicketService {

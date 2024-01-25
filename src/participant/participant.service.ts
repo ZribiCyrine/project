@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Participant } from '../entities/participant.ts';
+import { Participant } from '../entities/participant.entity.js';
 import { Repository } from 'typeorm';
 import { InfoDto } from '../dto/info.dto';
 import { Role } from '../enum/role.enum';

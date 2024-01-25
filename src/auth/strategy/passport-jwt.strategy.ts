@@ -4,10 +4,10 @@ import { Strategy, ExtractJwt } from "passport-jwt"
 import { ConfigService } from "@nestjs/config"
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
-import { Admin } from "../../entities/admin.entity";
-import { Participant } from "../../entities/participant.ts";
 import { PayloadInterface } from "../interfaces/payload.interface";
 import { Role } from "../../enum/role.enum";
+import { Participant } from "../../entities/participant.entity";
+import { Admin } from "../../entities/admin.entity";
 
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
@@ -38,8 +38,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
         }
     }*/
     async validate(payload: PayloadInterface) {
-        let user: Participant | Admin;
-        if (payload.role === Role.PARTICIPANT || Role.CREATOR) {
+        let user;
+        if (payload.role === Role.PARTICIPANT || payload.role === Role.CREATOR) {
             user = await this.participantRepository.findOne({ where: { email: payload.email } });
         } else if (payload.role === Role.ADMIN) {
             user = await this.adminRepository.findOne({ where: { email: payload.email } });

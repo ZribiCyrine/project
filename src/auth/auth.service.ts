@@ -5,7 +5,7 @@ import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from 'bcrypt';
 import { ParticipantSubscribeDto } from "./dto/participant-subscribe.dto";
 import { ConfigService } from "@nestjs/config";
-import { Participant } from "../entities/participant.ts";
+import { Participant } from "../entities/participant.entity";
 import { Admin } from "../entities/admin.entity";
 import { Role } from "../enum/role.enum";
 import { LoginCredentialsDto } from "./dto/login-credentials.dto";
@@ -80,35 +80,43 @@ export class AuthService {
     }
   }
 
-  async loginAdmin(credentials: LoginCredentialsDto) {
+  async login(credentials: LoginCredentialsDto, userRepository: Repository<Participant | Admin>) {
     if (!credentials || !credentials.email || !credentials.password) {
       throw new BadRequestException('Invalid credentials provided.');
     }
+
     const { email, password } = credentials;
-    const admin = await this.adminRepository.findOne({ where: { email: email } });
-    if (!admin) {
+    const user = await userRepository.findOne({ where: { email } });
+
+    if (!user) {
       throw new NotFoundException('Email or password incorrect.');
     }
-    const hashedPassword = await bcrypt.hash(password, admin.salt);
-    console.log('match : ', admin.password === hashedPassword)
-    if (admin.password === hashedPassword) {
+
+    const hashedPassword = await bcrypt.hash(password, user.salt);
+    if (user.password === hashedPassword) {
       const payload = {
-        name: admin.name,
-        firstname: admin.firstname,
-        email: admin.email,
-        role: admin.role
+        name: user.name,
+        firstname: user.firstname,
+        email: user.email,
+        role: user.role
       };
-      console.log(process.env.JWT_SECRET);
+
       const jwt = this.jwtService.sign(payload, {
-        secret: this.jwtSecret,
+        secret: process.env.JWT_SECRET,
         expiresIn: '1d',
       });
-      return {
-        "access_token": jwt,
-      };
+
+      return { "access_token": jwt };
     } else {
       throw new NotFoundException('Email or password incorrect.');
     }
+  }
+
+  async loginParticipant(credentials: LoginCredentialsDto) {
+    return this.login(credentials, this.participantRepository)
+  }
+  async loginAdmin(credentials: LoginCredentialsDto) {
+    return this.login(credentials, this.adminRepository)
   }
 
 

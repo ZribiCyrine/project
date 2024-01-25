@@ -8,7 +8,7 @@ import { EventStatus } from '../enum/eventStatus.enum';
 import { Admin } from '../entities/admin.entity';
 import { Creator } from '../entities/creator.entity';
 import { Role } from '../enum/role.enum';
-import { Participant } from '../entities/participant.ts';
+import { Participant } from '../entities/participant.entity';
 
 @Injectable()
 export class EventService {

@@ -14,7 +14,7 @@ import { Ticket } from './entities/ticket.entity';
 import { Image } from './entities/image.entity';
 import { AdminModule } from './admin/admin.module';
 import { AuthModule } from './auth/auth.module';
-import { Participant } from './entities/participant.ts';
+import { Participant } from './entities/participant.entity';
 import { ParticipantModule } from './participant/participant.module';
 
 @Module({

@@ -16,7 +16,7 @@ export class AuthController {
 
   @Post('/user/login')
   async loginUser(@Body() credentials: LoginCredentialsDto) {
-    return this.authService.loginUser(credentials);
+    return this.authService.loginParticipant(credentials);
   }
 
   @Post('/admin/login')
