@@ -3,37 +3,46 @@ import { EventService } from './event.service';
 import { CreateEventDto } from './dto/create-event.dto';
 import { UpdateEventDto } from './dto/update-event.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { RolesGuard } from '../auth/guards/roles.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../enum/role.enum';
 
 @Controller('event')
 export class EventController {
   constructor(private readonly eventService: EventService) { }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('accept/:id')
   acceptEvent(@Param('id') id: number, @Req() req) {
     const user = req.user;
     return this.eventService.acceptEvent(+id, user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('reject/:id')
   rejectEvent(@Param('id') id: number, @Req() req) {
     const user = req.user;
     return this.eventService.rejectEvent(+id, user);
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   create(@Body() createEventDto: CreateEventDto, @Req() req) {
     const userId = req.user.id;
     return this.eventService.create(createEventDto, userId);
   }
 
+  @Roles(Role.ADMIN)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/recent')
   getRecentNonConfirmedEvents() {
     return this.eventService.getRecentNonConfirmedEvents();
   }
 
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
   @UseGuards(JwtAuthGuard)
   @Get('/myEvents')
   async getMyEvents(@Req() req) {
@@ -42,6 +51,8 @@ export class EventController {
     return events;
   }
 
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/confirmed')
   async getConfirmedEvents() {
     return this.eventService.getConfirmedEvents();

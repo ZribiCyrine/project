@@ -36,9 +36,6 @@ export class TicketService {
   }
 
   async buyTicket(purchaser: Participant, eventId: number): Promise<Ticket> {
-    if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
-      throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
-    }
     const event = await this.eventRepository.findOne(({ where: { id: eventId } }));
     if (event.capacity <= 0) {
       throw new NotFoundException('Event is sold out.');
@@ -55,9 +52,6 @@ export class TicketService {
   }
 
   async reserveTicket(purchaser: Participant, eventId: number): Promise<Ticket> {
-    if (purchaser.role !== Role.PARTICIPANT && purchaser.role !== Role.CREATOR) {
-      throw new NotFoundException(`User with ID ${purchaser.id} not allowed to buy tickets`);
-    }
     const event = await this.eventRepository.findOne({ where: { id: eventId } });
     if (event.capacity <= 0) {
       throw new NotFoundException('Event is sold out.');

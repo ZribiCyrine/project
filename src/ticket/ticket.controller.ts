@@ -3,6 +3,9 @@ import { TicketService } from './ticket.service';
 import { CreateTicketDto } from './dto/create-ticket.dto';
 import { UpdateTicketDto } from './dto/update-ticket.dto';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { Role } from '../enum/role.enum';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 @Controller('ticket')
 export class TicketController {
@@ -18,7 +21,8 @@ export class TicketController {
     return this.ticketService.findAll();
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)    
   @Get('/purchaser')
   async findTicketsByPurchaser(@Req() req) {
     const purchaserId = req.user.id;
@@ -26,7 +30,8 @@ export class TicketController {
     return tickets;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/buy/:eventId')
   async buyTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
@@ -34,7 +39,8 @@ export class TicketController {
     return ticket;
   }
 
-  @UseGuards(JwtAuthGuard)
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)  
   @Post('/reserve/:eventId')
   async reserveTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
