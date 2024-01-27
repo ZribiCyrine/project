@@ -80,7 +80,7 @@ async function bootstrap() {
                event.lineUp = falso.randSinger();
                event.address = falso.randStreetAddress();
                event.capacity = falso.randNumber({ min: 50, max: 500 });
-               event.alcoholRules = alcoholRules[Math.floor(Math.random() * 2)];
+               event.alcoholRules = falso.randBoolean();
                event.ageRules = ageRules[Math.floor(Math.random() * 3)];
                event.dressCode = dressCode[Math.floor(Math.random() * 4)];
                event.ticketPrice = falso.randNumber({ min: 40, max: 120 });

@@ -31,7 +31,6 @@ export class TicketService {
   async findTicketsByPurchaser(purchaserId: number): Promise<Ticket[]> {
     return await this.ticketRepository.find({
       where: { purchaser: { id: purchaserId } },
-      relations: ['Event'],
     });
   }
 

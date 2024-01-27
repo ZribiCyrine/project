@@ -36,7 +36,6 @@ export class TicketController {
   async buyTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
     const ticket = await this.ticketService.buyTicket(participant, eventId);
-    return ticket;
   }
 
   @Roles(Role.CREATOR, Role.PARTICIPANT)
@@ -45,7 +44,6 @@ export class TicketController {
   async reserveTicket(@Req() req, @Param('eventId') eventId: number) {
     const participant = req.user;
     const ticket = await this.ticketService.reserveTicket(participant, eventId);
-    return ticket;
   }
 
 }

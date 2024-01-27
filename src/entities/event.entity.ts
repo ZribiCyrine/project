@@ -28,8 +28,8 @@ export class Event extends BaseDate {
     @Column({ type: 'int' })
     capacity: number;
 
-    @Column({ type: 'varchar' })
-    alcoholRules: string;
+    @Column({ type: 'bit' })
+    alcoholRules: boolean;
 
     @Column({ type: 'varchar' })
     ageRules: string;

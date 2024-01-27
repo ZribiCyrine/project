@@ -21,6 +21,14 @@ export class ImageService {
     }
   }
 
+  async findOne(id: number): Promise<Image> {
+    const image = await this.imageRepository.findOne({ where: { id: id } });
+    if (!image) {
+      throw new NotFoundException(`Image with ID ${id} not found`);
+    }
+    return image;
+  }
+
   async findByEventId(eventId: number): Promise<Image[]> {
     return await this.imageRepository.find({
       where: { event: { id: eventId } },

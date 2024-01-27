@@ -24,8 +24,8 @@ export class CreateEventDto {
   capacity: number;
 
   @IsNotEmpty()
-  @IsString()
-  alcoholRules: string;
+  @IsBoolean()
+  alcoholRules: boolean;
 
   @IsNotEmpty()
   @IsString()

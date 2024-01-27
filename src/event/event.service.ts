@@ -38,14 +38,14 @@ export class EventService {
     return await this.eventRepository
       .createQueryBuilder('event')
       .where('event.eventDate >= :currentDate', { currentDate })
-      .andWhere('event.isConfirmed = :isConfirmed', { isConfirmed: false })
+      .andWhere('event.status = :status', { status: EventStatus.PENDING })
       .getMany();
   }
 
   async getConfirmedEvents(): Promise<Event[]> {
     return await this.eventRepository
       .createQueryBuilder('event')
-      .where('event.isConfirmed = :isConfirmed', { isConfirmed: true })
+      .where('event.status = :status', { status: EventStatus.CONFIRMED })
       .getMany();
   }
 
