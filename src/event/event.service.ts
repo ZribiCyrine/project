@@ -45,6 +45,7 @@ export class EventService {
   async getConfirmedEvents(): Promise<Event[]> {
     return await this.eventRepository
       .createQueryBuilder('event')
+      .leftJoinAndSelect('event.image', 'image')
       .where('event.status = :status', { status: EventStatus.CONFIRMED })
       .getMany();
   }
