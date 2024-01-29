@@ -19,7 +19,7 @@ export class EventService {
     private readonly participantRepository: Repository<Participant>,
   ) { }
 
-  async create(createEventDto: CreateEventDto, userId: number): Promise<Event> {
+  async create(createEventDto: CreateEventDto, userId: number){
     let user = await this.participantRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
@@ -30,7 +30,7 @@ export class EventService {
     }
     const event = this.eventRepository.create(createEventDto);
     event.creator = user as Creator;
-    return await this.eventRepository.save(event);
+    await this.eventRepository.save(event);
   }
 
   async getRecentNonConfirmedEvents(): Promise<Event[]> {
@@ -53,7 +53,7 @@ export class EventService {
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
     const creator = await this.participantRepository.findOne({
       where: { id: creatorId, role: Role.CREATOR }
-    });
+    });0
     if (!creator) {
       return [];
     }

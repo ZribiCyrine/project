@@ -1,4 +1,4 @@
-import { IsString, IsInt, IsOptional, IsNumber, ArrayNotEmpty, IsArray, IsNotEmpty, IsBoolean } from 'class-validator';
+import { IsString, IsInt, IsOptional, IsNumber, ArrayNotEmpty, IsArray, IsNotEmpty, IsBoolean, IsDate } from 'class-validator';
 import { SellPoint } from '../../entities/sellPoint.entity';
 import { Image } from '../../entities/image.entity';
 
@@ -38,6 +38,10 @@ export class CreateEventDto {
   @IsNotEmpty()
   @IsNumber()
   ticketPrice: number;
+
+  @IsNotEmpty()
+  @IsDate()
+  eventDate: Date;
 
   @IsNotEmpty()
   sellPoint: SellPoint;
