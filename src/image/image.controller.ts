@@ -44,4 +44,9 @@ export class ImageController {
     return this.imageService.findByEventId(eventId);
   }
 
+  @Get()
+  async findAll(){
+    return this.imageService.findAll();
+  }
+
 }

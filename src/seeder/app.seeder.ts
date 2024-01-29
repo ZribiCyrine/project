@@ -56,47 +56,40 @@ async function bootstrap() {
             sellPoints.push(newSellPoint);
         }
 
-        const images = [];
-        for (let i = 0; i < 13; i++) {
-            const image = new Image();
-            const imageData = Buffer.from(falso.randUrl(), 'base64');
-            image.data = imageData;
-            const newImage = await imageService.create(image);
-            images.push(newImage);
+        const images = await imageService.findAll();
+
+        const creators = await participantService.findAll();
+        const creatorIds = creators.map(creator => creator.id);
+
+        const events = [];
+        const alcoholRules = ['Alcool autorisé', 'Alcool interdit'];
+        const ageRules = ['+18', '12 ans et plus', 'Tout public'];
+        const dressCode = ['Décontracté', 'Créatif', 'Vintage', 'Cocktail'];
+
+        for (let i = 0; i < 10; i++) {
+            const event = new Event();
+            event.name = falso.randWord();
+            event.type = falso.randMusicGenre();
+            event.lineUp = falso.randSinger();
+            event.address = falso.randStreetAddress();
+            event.capacity = falso.randNumber({ min: 50, max: 500 });
+            event.alcoholRules = falso.randBoolean();
+            event.ageRules = ageRules[Math.floor(Math.random() * 3)];
+            event.dressCode = dressCode[Math.floor(Math.random() * 4)];
+            event.ticketPrice = falso.randNumber({ min: 40, max: 120 });
+            event.eventDate = falso.randSoonDate().toISOString();
+            event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
+            event.image = images[i];
+            const creatorId = creatorIds[Math.floor(Math.random() * creatorIds.length)];
+
+            try {
+                const newEvent = await eventService.create(event, creatorId);
+                events.push(newEvent);
+            } catch (error) {
+                Logger.error(`Error creating event: ${error.message}`);
+            }
         }
 
-           const creators = await participantService.findAll();
-           const creatorIds = creators.map(creator => creator.id);
-   
-           const events = [];
-           const alcoholRules = ['Alcool autorisé', 'Alcool interdit'];
-           const ageRules = ['+18', '12 ans et plus', 'Tout public'];
-           const dressCode = ['Décontracté', 'Créatif', 'Vintage', 'Cocktail'];
-   
-           for (let i = 0; i < 10; i++) {
-               const event = new Event();
-               event.name = falso.randWord();
-               event.type = falso.randMusicGenre();
-               event.lineUp = falso.randSinger();
-               event.address = falso.randStreetAddress();
-               event.capacity = falso.randNumber({ min: 50, max: 500 });
-               event.alcoholRules = falso.randBoolean();
-               event.ageRules = ageRules[Math.floor(Math.random() * 3)];
-               event.dressCode = dressCode[Math.floor(Math.random() * 4)];
-               event.ticketPrice = falso.randNumber({ min: 40, max: 120 });
-               event.eventDate = falso.randSoonDate();
-               event.sellPoint = sellPoints[Math.floor(Math.random() * sellPoints.length)];
-               event.image = images[i];
-               const creatorId = creatorIds[Math.floor(Math.random() * creatorIds.length)];
-   
-               try {
-                   const newEvent = await eventService.create(event, creatorId);
-                   events.push(newEvent);
-               } catch (error) {
-                   Logger.error(`Error creating event: ${error.message}`);
-               }
-           }
-   
         await app.close();
     } catch (error) {
         Logger.error(`Error during database connection or seed operations: ${error.message}`);

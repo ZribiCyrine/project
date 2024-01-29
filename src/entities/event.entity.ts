@@ -41,10 +41,11 @@ export class Event extends BaseDate {
     ticketPrice: number;
 
     @Column({ type: 'datetime' })
-    eventDate: Date;
+    eventDate: string;
 
     @ManyToOne(() => SellPoint, sellPoint => sellPoint.events, {
         eager: true,
+        cascade: true
     })
     sellPoint: SellPoint;
 

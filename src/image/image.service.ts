@@ -35,4 +35,8 @@ export class ImageService {
     });
   }
 
+  async findAll(): Promise<Image[]> {
+    return await this.imageRepository.find();
+  }
+
 }

@@ -43,10 +43,12 @@ export class EventService {
   }
 
   async getConfirmedEvents(): Promise<Event[]> {
+    const currentDate = new Date();
     return await this.eventRepository
       .createQueryBuilder('event')
       .leftJoinAndSelect('event.image', 'image')
-      .where('event.status = :status', { status: EventStatus.CONFIRMED })
+      .where('event.eventDate >= :currentDate', { currentDate })
+      .andWhere('event.status = :status', { status: EventStatus.CONFIRMED })
       .getMany();
   }
 

@@ -40,8 +40,8 @@ export class CreateEventDto {
   ticketPrice: number;
 
   @IsNotEmpty()
-  @IsDate()
-  eventDate: Date;
+  @IsString()
+  eventDate: string;
 
   @IsNotEmpty()
   sellPoint: SellPoint;
