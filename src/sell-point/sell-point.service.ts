@@ -14,6 +14,7 @@ export class SellPointService {
   ) { }
 
   async create(createSellPointDto: CreateSellPointDto): Promise<SellPoint> {
+    console.log(createSellPointDto);
     const sellPoint = this.sellPointRepository.create(createSellPointDto);
     return await this.sellPointRepository.save(sellPoint);
   }
