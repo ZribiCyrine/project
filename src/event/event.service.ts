@@ -55,8 +55,8 @@ export class EventService {
 
   async findEventsByCreator(creatorId: number): Promise<Event[]> {
     const creator = await this.participantRepository.findOne({
-      where: { id: creatorId, role: Role.CREATOR }
-    });0
+      where: { id: creatorId, role: Role.CREATOR },
+    });
     if (!creator) {
       return [];
     }

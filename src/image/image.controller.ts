@@ -49,4 +49,9 @@ export class ImageController {
     return this.imageService.findAll();
   }
 
+  @Delete(':id')
+  remove(@Param('id') id: string) {
+    return this.imageService.remove(+id);
+  }
+
 }

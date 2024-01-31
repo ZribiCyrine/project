@@ -14,9 +14,11 @@ export class ImageService {
 
   async create(createImageDto: CreateImageDto): Promise<Image> {
     try {
-      console.log(createImageDto);
       const image = this.imageRepository.create(createImageDto);
+      console.log(createImageDto);
+
       return await this.imageRepository.save(image);
+
     } catch (error) {
       throw new BadRequestException('Unable to create image.');
     }
@@ -38,6 +40,10 @@ export class ImageService {
 
   async findAll(): Promise<Image[]> {
     return await this.imageRepository.find();
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.imageRepository.delete(id);
   }
 
 }
