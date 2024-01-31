@@ -51,8 +51,8 @@ export class EventController {
     return events;
   }
 
-  //@Roles(Role.CREATOR, Role.PARTICIPANT)
-  //@UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles(Role.CREATOR, Role.PARTICIPANT)
+  @UseGuards(JwtAuthGuard, RolesGuard)
   @Get('/confirmed')
   async getConfirmedEvents() {
     return this.eventService.getConfirmedEvents();
