@@ -45,7 +45,6 @@ export class Event extends BaseDate {
 
     @ManyToOne(() => SellPoint, sellPoint => sellPoint.events, {
         eager: true,
-        cascade: true
     })
     sellPoint: SellPoint;
 

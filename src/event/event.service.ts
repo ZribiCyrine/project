@@ -9,6 +9,8 @@ import { Admin } from '../entities/admin.entity';
 import { Creator } from '../entities/creator.entity';
 import { Role } from '../enum/role.enum';
 import { Participant } from '../entities/participant.entity';
+import { Image } from '../entities/image.entity';
+import { SellPoint } from '../entities/sellPoint.entity';
 
 @Injectable()
 export class EventService {
@@ -17,21 +19,49 @@ export class EventService {
     private readonly eventRepository: Repository<Event>,
     @InjectRepository(Participant)
     private readonly participantRepository: Repository<Participant>,
+    @InjectRepository(SellPoint)
+    private readonly sellPointRepository: Repository<SellPoint>
   ) { }
 
-  async create(createEventDto: CreateEventDto, userId: number){
+   async create(createEventDto: CreateEventDto, userId: number): Promise<Event> {
     let user = await this.participantRepository.findOne({ where: { id: userId } });
+  
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
     }
+  
     if (user.role !== Role.CREATOR) {
       await this.participantRepository.update(userId, { role: Role.CREATOR });
       user = await this.participantRepository.findOne({ where: { id: userId } });
     }
+  
+    // Vérifiez si le SellPoint existe déjà
+    let sellPoint = await this.sellPointRepository.findOne({
+      where: {
+        name: createEventDto.sellPoint.name,
+        address: createEventDto.sellPoint.address,
+        phoneNumber: createEventDto.sellPoint.phoneNumber,
+      },
+    });
+  
+    // S'il n'existe pas, créez un nouveau SellPoint
+    if (!sellPoint) {
+      sellPoint = this.sellPointRepository.create({
+        name: createEventDto.sellPoint.name,
+        address: createEventDto.sellPoint.address,
+        phoneNumber: createEventDto.sellPoint.phoneNumber,
+      });
+      sellPoint = await this.sellPointRepository.save(sellPoint);
+    }
+  
+    // Créez l'événement avec le SellPoint existant ou le nouveau
     const event = this.eventRepository.create(createEventDto);
     event.creator = user as Creator;
+    event.sellPoint = sellPoint;
+  
     return await this.eventRepository.save(event);
   }
+  
 
   async getRecentNonConfirmedEvents(): Promise<Event[]> {
     const currentDate = new Date();
