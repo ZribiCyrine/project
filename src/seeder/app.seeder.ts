@@ -26,12 +26,12 @@ async function bootstrap() {
         const imageService = app.get(ImageService);
         const sellPointService = app.get(SellPointService);
 
-        const admin1 = new Admin();
+    /*    const admin1 = new Admin();
         admin1.firstname = "cyrine";
         admin1.name = "zribi";
         admin1.cin = 11223344;
         admin1.phoneNumber = 52712485;
-        admin1.email = "cyrinezribi23@gmail.com";
+        admin1.email = "cyrinezribi@gmail.com";
         admin1.salt = await bcrypt.genSalt();
         admin1.password = await bcrypt.hash("cyrine123", admin1.salt);
         await adminService.create(admin1);
@@ -46,7 +46,7 @@ async function bootstrap() {
         admin2.password = await bcrypt.hash("salim123", admin2.salt);
         await adminService.create(admin2);
 
-        const sellPoints = [];
+      /*  const sellPoints = [];
         for (let i = 0; i < 10; i++) {
             const sellPoint = new SellPoint();
             sellPoint.name = falso.randCompanyName();
@@ -54,19 +54,19 @@ async function bootstrap() {
             sellPoint.phoneNumber = falso.randNumber({ min: 10000000, max: 99999999 });
             const newSellPoint = await sellPointService.create(sellPoint);
             sellPoints.push(newSellPoint);
-        }
+        }*/
 
         const images = await imageService.findAll();
+        const sellPoints = await sellPointService.findAll();
 
         const creators = await participantService.findAll();
         const creatorIds = creators.map(creator => creator.id);
 
         const events = [];
-        const alcoholRules = ['Alcool autorisé', 'Alcool interdit'];
         const ageRules = ['+18', '12 ans et plus', 'Tout public'];
         const dressCode = ['Décontracté', 'Créatif', 'Vintage', 'Cocktail'];
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 16; i++) {
             const event = new Event();
             event.name = falso.randWord();
             event.type = falso.randMusicGenre();

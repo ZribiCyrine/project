@@ -11,7 +11,7 @@ async function bootstrap() {
   
   // Ou pour une configuration plus spécifique :
   app.enableCors({
-    origin: ['http://localhost:4200', 'http://localhost:50262'], // ou un tableau d'origines valides
+    origin: ['http://localhost:4200', 'http://localhost:55535'], // ou un tableau d'origines valides
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     allowedHeaders: 'Content-Type, Accept',
   });

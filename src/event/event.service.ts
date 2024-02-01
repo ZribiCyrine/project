@@ -9,7 +9,6 @@ import { Admin } from '../entities/admin.entity';
 import { Creator } from '../entities/creator.entity';
 import { Role } from '../enum/role.enum';
 import { Participant } from '../entities/participant.entity';
-import { Image } from '../entities/image.entity';
 import { SellPoint } from '../entities/sellPoint.entity';
 
 @Injectable()
