@@ -20,7 +20,6 @@ export class EventService {
   ) { }
 
   async create(createEventDto: CreateEventDto, userId: number){
-    console.log(createEventDto);
     let user = await this.participantRepository.findOne({ where: { id: userId } });
     if (!user) {
       throw new NotFoundException(`User with ID ${userId} not found`);
@@ -40,7 +39,7 @@ export class EventService {
       .createQueryBuilder('event')
       .where('event.eventDate >= :currentDate', { currentDate })
       .andWhere('event.status = :status', { status: EventStatus.PENDING })
-      .orderBy('event.eventDate', 'DESC') // Ajout de l'ordonnancement par date d'événement décroissante
+      .orderBy('event.eventDate', 'DESC')
       .getMany();
   }
   
@@ -51,7 +50,7 @@ export class EventService {
       .leftJoinAndSelect('event.image', 'image')
       .where('event.eventDate >= :currentDate', { currentDate })
       .andWhere('event.status = :status', { status: EventStatus.CONFIRMED })
-      .orderBy('event.eventDate', 'DESC') // Ajout de l'ordonnancement par date d'événement décroissante
+      .orderBy('event.eventDate', 'DESC') 
       .getMany();
   }
   
@@ -65,7 +64,7 @@ export class EventService {
     return await this.eventRepository.find({
       where: { creator: { id: creatorId } },
       order: {
-        eventDate: 'DESC' // Ajout de l'ordonnancement par date d'événement décroissante
+        eventDate: 'DESC'
       }
     });
   }
